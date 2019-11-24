@@ -1,5 +1,4 @@
--- TABELA ESTADO
-
+-- ESTADO
 
 INSERT INTO estado (uf, nome) VALUES ('AC', 'Acre');
 INSERT INTO estado (uf, nome) VALUES ('AL', 'Alagoas');

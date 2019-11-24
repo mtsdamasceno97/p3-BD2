@@ -29,7 +29,6 @@ JOIN marca mc ON mc.idMarca = md.idMarca
 JOIN tipo tp ON tp.idTipo = md.idTipo);
 
 --VIEW 3
-
 CREATE OR REPLACE VIEW infracao_multa AS
 (SELECT COUNT(inf.idInfracao) quantidade_infracoes,
 		SUM(mt.valor) valor_multas,

@@ -1,12 +1,12 @@
--- VISÕES
+---- VISÕES
 
 --VIEW 1:
 CREATE OR REPLACE VIEW condutor_carteira AS
 (SELECT cdt.idCadastro Condutor,
-       cdt.nome Nome_Condutor,
-       cdt.idCategoriaCNH Categoria_CNH,
-       SUM(inf.pontos) Pontos_Infracoes,
-       date_part('year', mt.dataInfracao) Ano_Infracao
+		cdt.nome Nome_Condutor,
+		cdt.idCategoriaCNH Categoria_CNH,
+		SUM(inf.pontos) pontos_infracoes,
+		date_part('year', mt.dataInfracao) ano_infracao
 FROM condutor cdt JOIN multa mt ON cdt.idCadastro = mt.idCondutor
 JOIN infracao inf ON inf.idInfracao = mt.idInfracao
 GROUP BY Ano, Condutor);
@@ -14,13 +14,13 @@ GROUP BY Ano, Condutor);
 --VIEW 2:
 CREATE OR REPLACE VIEW veiculo_condutor AS
 (SELECT vcl.renavam, 
-       vcl.placa,
-       cdt.nome Condutor,
-       md.denominacao Modelo,
-       mc.nome Marca,
-       tp.descricao Tipo,
-       cd.nome Cidade,
-       est.uf Estado
+		vcl.placa,
+		cdt.nome Condutor,
+		md.denominacao Modelo,
+		mc.nome Marca,
+		tp.descricao Tipo,
+ 		cd.nome Cidade,
+		est.uf Estado
 FROM estado est JOIN cidade cd ON est.uf = cd.uf
 JOIN condutor cdt ON cdt.idCidade = cd.idCidade
 JOIN veiculo vcl ON cdt.idCadastro = vcl.idProprietario
@@ -30,56 +30,66 @@ JOIN tipo tp ON tp.idTipo = md.idTipo);
 
 --VIEW 3
 
+CREATE OR REPLACE VIEW infracao_multa AS
+(SELECT COUNT(inf.idInfracao) quantidade_infracoes,
+		SUM(mt.valor) valor_multas,
+		date_part('month', mt.dataInfracao) mes,
+		date_part('year', mt.dataInfracao) ano
+FROM infracao inf JOIN multa mt ON inf.idInfracao = mt.idInfracao
+GROUP BY ano, mes
+ORDER BY ano);
+
 
 ---- FUNÇÕES/PROCEDURES/TRIGGERS
 
 --RENAVAM
 
-create or replace function renavam()
-returns integer 
-as $$
-declare
+CREATE OR REPLACE FUNCTION renavam()
+RETURNS CHAR(13) 
+AS $$
+DECLARE
 	numero integer;
 	soma integer;
 	retorno integer;
 	i integer := 0;
 	renavam char(13);
 	fator integer [] := array [3,2,9,8,7,6,5,4,3,2];
-begin
-	loop
+BEGIN
+	LOOP
 		soma := 0;
 		retorno := 0;
 		renavam := '';		
-		for i in 1..10 loop
+		FOR i IN 1..10 LOOP
 			numero := trunc(random()*9);
 			renavam := renavam || numero;
 			soma := soma + numero * fator[i];
-		end loop;		
+		END LOOP;		
 		retorno = (soma * 10) % 11;
-		exit when (retorno != 10);
-	end loop;
+		EXIT WHEN (retorno != 10);
+	END LOOP;
 	renavam := renavam || retorno;
-	return renavam;
-end; $$
-language plpgsql;
+	RETURN renavam;
+END; $$
+LANGUAGE plpgsql;
 
 -- SUSPENSÃO CNH
 
 CREATE OR REPLACE FUNCTION susp_cnh()
 RETURNS trigger
 AS $$
-declare	
+DECLARE
 	a integer;	
-begin
-		a := (select infracoes from condutor_carteira
-		where Condutor = new.idCondutor);
-		if(a > 19) then
-			update condutor set situacaoCNH = 'S';
-			where Condutor = new.idCondutor);
-		end if;	 
-end; $$ 
-LANGUAGE plpgsql;
+BEGIN
+		a := (select pontos_infracoes FROM condutor_carteira
+		WHERE Condutor = new.idCondutor);							
+		IF(a >= 20) THEN
+			UPDATE condutor SET situacaoCNH = 'S'
+			WHERE idCadastro = NEW.idCondutor;			
+		END IF;		 
+		RETURN NULL;
+END; $$ 
+LANGUAGE plpgsql; 
  
 CREATE TRIGGER executa_suspensao_cnh
 AFTER INSERT ON multa
-    FOR EACH ROW EXECUTE PROCEDURE susp_cnh();
+FOR EACH ROW EXECUTE PROCEDURE susp_cnh();

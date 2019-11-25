@@ -92,3 +92,18 @@ LANGUAGE plpgsql;
 CREATE TRIGGER executa_suspensao_cnh
 AFTER INSERT ON multa
 FOR EACH ROW EXECUTE PROCEDURE susp_cnh();
+
+-- TRANSFERÊNCIA DE PROPRIETÁRIO
+
+CREATE OR REPLACE FUNCTION edicao_proprietario()
+RETURNS trigger
+AS $$
+    begin
+        insert into transferencia(renavam,idproprietario,datacompra,datavenda) values (OLD.renavam, OLD.idProprietario,OLD.dataCompra,new.dataaquisicao);
+        return old;
+    end;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER executa_edicao_proprietario
+AFTER UPDATE ON veiculo
+    FOR EACH ROW EXECUTE PROCEDURE edicao_proprietario();

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Listagem dos Veículos</title>
+</head>
+<body>
+    <h1>Listagem de veículos cadastrados</h1>
+    <table>
+        <thead>
+            <tr>
+                <td>Renavam</td>
+                <td>Placa</td>
+                <td>Ano</td>
+                <td>Data de Compra</td>
+                <td>Data de Aquisição</td>
+                <td>Valor</td>
+                <td>Situação</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="veiculo : ${veiculos}">
+                <td th:text="${veiculo.renavam}"></td>
+                <td th:text="${veiculo.placa}"></td>
+                <td th:text="${veiculo.ano}"></td>
+                <td th:text="${veiculo.dataCompra}"></td>
+                <td th:text="${veiculo.dataAquisicao}"></td>
+                <td th:text="${veiculo.valor}"></td>
+                <td th:text="${veiculo.situacao}"></td>
+            </tr>
+        </tbody>
+    </table>
+    <a href="/veiculos/inserir-veiculo">Inserir veículo</a>
+</body>
+</html>

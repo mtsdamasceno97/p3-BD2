@@ -1,9 +1,10 @@
 package br.edu.ifpb.p3bd2.modelo;
 
 import lombok.Data;
+
 import javax.persistence.*;
 import javax.validation.constraints.Size;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -26,10 +27,10 @@ public class Veiculo {
 	private Integer ano;
 
 	@Column(nullable = false, name = "datacompra")
-	private LocalDateTime dataCompra;
+	private LocalDate dataCompra;
 
 	@Column(nullable = false, name = "dataaquisicao")
-	private LocalDateTime dataAquisicao;
+	private LocalDate dataAquisicao;
 
 	@Column(nullable = false, name = "valor")
 	private Float valor;

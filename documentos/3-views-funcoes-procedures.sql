@@ -107,3 +107,29 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER executa_edicao_proprietario
 AFTER UPDATE ON veiculo
     FOR EACH ROW EXECUTE PROCEDURE edicao_proprietario();
+
+-- TRIGGER PARA CONTROLE DE ALTERAÇÃO DO CONDUTOR
+
+
+CREATE OR REPLACE FUNCTION alterar_condutor()
+RETURNS trigger
+AS $$
+
+declare
+begin
+							
+		if((select current_date) > old.datavencimento) then
+			raise exception 'A data para alteração foi excedida';
+			
+		end if;
+		 
+		return NULL;
+end; $$ 
+LANGUAGE plpgsql;
+
+ 
+CREATE TRIGGER executa_mudanca_condutor
+BEFORE UPDATE ON multa
+FOR EACH ROW 
+WHEN (OLD.idcondutor IS DISTINCT FROM NEW.idcondutor)
+EXECUTE PROCEDURE alterar_condutor();

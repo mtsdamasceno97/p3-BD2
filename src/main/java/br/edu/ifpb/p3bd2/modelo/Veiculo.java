@@ -1,6 +1,7 @@
 package br.edu.ifpb.p3bd2.modelo;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -26,9 +27,11 @@ public class Veiculo {
 	@Column(nullable = false, name = "ano")
 	private Integer ano;
 
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@Column(nullable = false, name = "datacompra")
 	private LocalDate dataCompra;
 
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@Column(nullable = false, name = "dataaquisicao")
 	private LocalDate dataAquisicao;
 

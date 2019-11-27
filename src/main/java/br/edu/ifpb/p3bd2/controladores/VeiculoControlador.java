@@ -29,6 +29,7 @@ public class VeiculoControlador {
 
 	@PostMapping
 	public String inserirVeiculo(@ModelAttribute Veiculo veiculo) {
+		System.out.println(veiculo);
 		return "veiculos";
 	}
 

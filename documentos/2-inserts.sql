@@ -1145,16 +1145,12 @@ INSERT INTO infracao (descricao, valor, pontos) VALUES ('I Deixar de dar prefer�
 INSERT INTO infracao (descricao, valor, pontos) VALUES ('II Não deixar pedestre concluir a travessia, mesmo com sinal verde',293.47,7);
 INSERT INTO infracao (descricao, valor, pontos) VALUES ('III Deixar de dar preferência a portadores de deficiência, crianças, idosos e gestantes',293.47,7);
 INSERT INTO infracao (descricao, valor, pontos) VALUES ('IV Deixar de dar preferência a pedestre quando houver iniciado a travessia',195.23,5);
-INSERT INTO infracao (descricao, valor, pontos) VALUES ('V Deixar de dar preferência a pedestre que esteja atravessando a via transversal para onde se dirige o veículo',195.23,5);
-INSERT INTO infracao (descricao, valor, pontos) VALUES ('I Deixar de dar preferência em interseção a veículo circulando por rodovia, rotatória ou que venha da direita',195.23,5);
 INSERT INTO infracao (descricao, valor, pontos) VALUES ('II Deixar de dar preferência nas interseções com sinalização de Dê a Preferência',195.23,5);
 INSERT INTO infracao (descricao, valor, pontos) VALUES ('Entrar ou sairde áreas lindeiras sem as precauções de segurança',130.16,4);
-INSERT INTO infracao (descricao, valor, pontos) VALUES ('Entrar ou sairde fila de veículos estacionados sem dar preferência de passagem a pedestres e a outros veículos',130.16,5);
 INSERT INTO infracao (descricao, valor, pontos) VALUES ('I Transitar emvelocidade superior à máxima permitida em até 20%',130.16,4);
 INSERT INTO infracao (descricao, valor, pontos) VALUES ('II Transitar em velocidade superior à máxima permitida em 20% até 50%.',195.23,5);
 INSERT INTO infracao (descricao, valor, pontos) VALUES ('III Transitar em velocidade superior a 50% da máxima permitida',880.41,7);
 INSERT INTO infracao (descricao, valor, pontos) VALUES ('Transitar em velocidade inferior à metade permitida',130.16,4);
-INSERT INTO infracao (descricao, valor, pontos) VALUES ('I Deixar de reduzir a velocidade ao se aproximar de passeatas, aglomerações, cortejos,préstitos e desfiles',293.47,7);
 INSERT INTO infracao (descricao, valor, pontos) VALUES ('II Deixar de reduzir a velocidade onde o trânsito esteja sendo controlado por agente',195.23,5);
 INSERT INTO infracao (descricao, valor, pontos) VALUES ('III Deixar de reduzir a velocidade ao aproximar-se da calçada ou acostamento',195.23,5);
 INSERT INTO infracao (descricao, valor, pontos) VALUES ('IV Deixar de reduzir a velocidade ao aproximar-se de interseção não sinalizada',195.23,5);
@@ -1210,8 +1206,6 @@ INSERT INTO infracao (descricao, valor, pontos) VALUES ('I Transitar com o veíc
 INSERT INTO infracao (descricao, valor, pontos) VALUES ('II Transitar com o veículo derramando combustível ou lubrificante ou qualquer objeto que traga risco',293.47,7);
 INSERT INTO infracao (descricao, valor, pontos) VALUES ('III Transitar produzindo fumaça, gases ou partículas em níveis superiores aos fixados pelo CONTRAN',195.23,5);
 INSERT INTO infracao (descricao, valor, pontos) VALUES ('IV Transitar com o veículo de dimensões ou de sua carga superiores aos limites',195.23,5);
-INSERT INTO infracao (descricao, valor, pontos) VALUES ('V Transitar com o veículo com excesso de peso (R$ 130,16 + acréscimo previsto nas alíneas de acordo com o excesso)',130.16,4);
-INSERT INTO infracao (descricao, valor, pontos) VALUES ('VI Transitar em desacordo com a autorização para transitar com dimensões excedentes, ou com esta vencida',195.23,5);
 INSERT INTO infracao (descricao, valor, pontos) VALUES ('VII Transitar com o veículo com lotação excedente',130.16,4);
 INSERT INTO infracao (descricao, valor, pontos) VALUES ('VIII Efetuar transporte remunerado de passageiros sem autorização',130.16,4);
 INSERT INTO infracao (descricao, valor, pontos) VALUES ('IX Transitar com o veículo desligado ou desengrenado',130.16,4);
@@ -1244,8 +1238,6 @@ INSERT INTO infracao (descricao, valor, pontos) VALUES ('Transportar emveículo 
 INSERT INTO infracao (descricao, valor, pontos) VALUES ('Não acender asluzes de posição à noite quando estiver parado para embarque ou carga de mercadorias',130.16,4);
 INSERT INTO infracao (descricao, valor, pontos) VALUES ('I, a deixar demanter acesa a luz baixa a noite',130.16,4);
 INSERT INTO infracao (descricao, valor, pontos) VALUES ('I, b deixar demanter acesa a luz baixa de dia, nos túneis e nas rodovias',130.16,4);
-INSERT INTO infracao (descricao, valor, pontos) VALUES ('I, c veículo de transporte coletivo deixar de manter acesa a luz baixa de dia e de noite, circulando em faixas ou pistas a eles destinadas',130.16,4);
-INSERT INTO infracao (descricao, valor, pontos) VALUES ('I, d deixar demanter acesa a luz baixa de dia e de noite, tratando-se de ciclomotores',130.16,4);
 INSERT INTO infracao (descricao, valor, pontos) VALUES ('II deixar de manter acesas pelo menos as luzes de posição sob chuva forte, neblina ou cerração;',130.16,4);
 INSERT INTO infracao (descricao, valor, pontos) VALUES ('III deixar de manter a placa traseira iluminada à noite;',130.16,4);
 INSERT INTO infracao (descricao, valor, pontos) VALUES ('I Utilizar o pisca alerta, exceto em imobilizações ou situações de emergência',130.16,4);

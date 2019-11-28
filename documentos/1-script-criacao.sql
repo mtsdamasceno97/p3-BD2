@@ -80,7 +80,7 @@ CREATE TABLE condutor (
 );
 
 CREATE TABLE veiculo (
-	renavam char(13) NOT NULL,
+	renavam char(11) NOT NULL,
 	placa char(7) NOT NULL,
 	ano int NOT NULL,
 	idCategoria serial NOT NULL,
@@ -102,7 +102,7 @@ CREATE TABLE veiculo (
 
 CREATE TABLE licenciamento (
 	ano int NOT NULL,
-	renavam char(13) NOT NULL,
+	renavam char(11) NOT NULL,
 	dataVenc date,
 	pago char(1) NOT NULL DEFAULT 'N',
 	CONSTRAINT CK_licenciamento_pago CHECK (pago='S' or pago='N'),
@@ -112,7 +112,7 @@ CREATE TABLE licenciamento (
 
 CREATE TABLE multa (
 	idMulta serial NOT NULL,
-	renavam char(13) NOT NULL,
+	renavam char(11) NOT NULL,
 	idInfracao serial NOT NULL,
 	idCondutor serial NOT NULL,
 	dataInfracao date NOT NULL,
@@ -131,7 +131,7 @@ CREATE TABLE multa (
 
 CREATE TABLE transferencia (
 	idHistorico serial NOT NULL,
-	renavam char(13) NOT NULL,
+	renavam char(11) NOT NULL,
 	idProprietario serial NOT NULL,
 	dataCompra date NOT NULL,
 	dataVenda date,

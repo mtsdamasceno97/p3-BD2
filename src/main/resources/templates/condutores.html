@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Listagem dos Condutores</title>
+</head>
+<body>
+    <h1>Listagem de condutores cadastrados</h1>
+    <table>
+        <thead>
+            <tr>
+                 <td>idCadastro</td>
+                 <td>CPF</td>
+                 <td>Nome</td>
+                 <td>DataNasc</td>
+                 <td>idCategoriaCNH</td>
+                 <td>Endereço</td>
+                 <td>Bairro</td>
+                 <td>idCidade</td>
+                 <td>situacaoCNH</td>
+            </tr>
+        </thead>
+        <tbody>
+
+
+
+                <tr th:each="condutor : ${condutores}">
+
+                    <td th:text="${condutor.idCadastro}"></td>
+                    <td th:text="${condutor.cpf}"></td>
+                    <td th:text="${condutor.nome}"></td>
+                    <td th:text="${condutor.dataNasc}"></td>
+                    <!--<td th:text="${condutor.idCategoriacnh}"></td>-->
+                    <td th:text="${condutor.endereco}"></td>
+                    <td th:text="${condutor.bairro}"></td>
+                    <td th:text="${condutor.cidade.nome}"></td>
+                    <td th:text="${condutor.situacaoCNH}"></td>
+
+                 </tr>
+        </tbody>
+    </table>
+<a href="/veiculos/inserir-veiculo">Inserir condutor</a>
+</body>
+</html>

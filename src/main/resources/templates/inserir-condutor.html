@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Inserção de Condutores</title>
+</head>
+<body>
+<h1>Inserção de Condutor</h1>
+<form action="#" th:action="@{/condutores}" th:object="${condutor}" method="post">
+    <p>Cpf: <input type="text" th:field="*{cpf}" /></p>
+    <p>Nome: <input type="number" th:field="*{nome}" /></p>
+    <p>Data de Nascimento: <input type="date" th:field="*{dataNasc}" /></p>
+    <p>Categoria CNH: <input type="date" th:field="*{idCategoriaCNH}" /></p>
+    <p>Endereço: <input type="number" th:field="*{endereco}" /></p>
+    <p>Bairro: <input type="text" th:field="*{bairro}" /></p>
+    <p>idCidade: <input type="text" th:field="*{idCidade}" /></p>
+    <p>Situação CNH: <input type="text" th:field="*{situacaoCNH}" /></p>
+    <p><input type="submit" value="Salvar" /><input type="reset" value="Limpar" /></p>
+</form>
+</body>
+</html>

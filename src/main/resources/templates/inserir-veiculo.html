@@ -2,18 +2,21 @@
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link th:href="@{/static/css/estilo.css}" rel="stylesheet" type="text/css" media="all"/>
     <title>Inserção de Veículo</title>
 </head>
 <body>
     <h1>Inserção de Veículo</h1>
-    <form action="#" th:action="@{/veiculos}" th:object="${veiculo}" method="post">
-        <p>Placa: <input type="text" th:field="*{placa}" /></p>
-        <p>Ano: <input type="number" th:field="*{ano}" /></p>
-        <p>Data da Compra: <input type="date" th:field="*{dataCompra}" /></p>
-        <p>Data da Aquisição: <input type="date" th:field="*{dataAquisicao}" /></p>
-        <p>Valor: <input type="number" th:field="*{valor}" /></p>
-        <p>Situação: <input type="text" th:field="*{situacao}" /></p>
-        <p><input type="submit" value="Salvar" /><input type="reset" value="Limpar" /></p>
-    </form>
+    <div id="area">
+        <form action="#" th:action="@{/veiculos}" th:object="${veiculo}" method="post">
+            <p>Placa: <input type="text" th:field="*{placa}" /></p>
+            <p>Ano: <input type="number" th:field="*{ano}" /></p>
+            <p>Data da Compra: <input type="date" th:field="*{dataCompra}" /></p>
+            <p>Data da Aquisição: <input type="date" th:field="*{dataAquisicao}" /></p>
+            <p>Valor: <input type="number" th:field="*{valor}" /></p>
+            <p>Situação: <input type="text" th:field="*{situacao}" /></p>
+            <p><input type="submit" value="Salvar" /><input type="reset" value="Limpar" /></p>
+        </form>
+    </div>
 </body>
 </html>

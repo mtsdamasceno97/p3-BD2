@@ -31,9 +31,9 @@ public class Condutor {
     @Column(nullable = false, name = "datanasc")
     private LocalDate dataNasc;
 
-    //@Size(min = 3, max = 3)
-    //@Column(length = 3, nullable = false, name = "idCategoriaCNH")
-    //private String idCategoriaCNH;
+    @ManyToOne
+    @JoinColumn(name = "idcategoriacnh")
+    private CategoriaCNH categoriaCNH;
 
 
     @Size(min = 50, max = 50)

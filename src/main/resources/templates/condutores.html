@@ -5,40 +5,45 @@
     <title>Listagem dos Condutores</title>
 </head>
 <body>
-    <h1>Listagem de condutores cadastrados</h1>
-    <table>
+    <h1>CONDUTORES CADASTRADOS</h1>
+    <table width=100%>
         <thead>
-            <tr>
-                 <td>idCadastro</td>
-                 <td>CPF</td>
-                 <td>Nome</td>
-                 <td>DataNasc</td>
-                 <td>idCategoriaCNH</td>
-                 <td>Endereço</td>
-                 <td>Bairro</td>
-                 <td>idCidade</td>
-                 <td>situacaoCNH</td>
+            <tr height=11%>
+                 <td align="center" ><h3>ID</h3></td>
+                 <td align="center"><h3>CPF</h3></td><td></td>
+                 <td align="center"><h3>NOME</h3></td>
+                 <td align="center"><h3>DataN</h3></td>
+                 <td align="center"><h3>CNH</h3></td>
+                 <td align="center"><h3>RUA</h3></td>
+                 <td align="center"><h3>BAIRRO</h3></td>
+                 <td align="center"><h3>CIDADE</h3></td>
+                 <td align="center"><h3>situacaoCNH</h3></td>
             </tr>
         </thead>
         <tbody>
 
 
 
-                <tr th:each="condutor : ${condutores}">
+                <tr th:each="condutor : ${condutores}" >
 
-                    <td th:text="${condutor.idCadastro}"></td>
-                    <td th:text="${condutor.cpf}"></td>
-                    <td th:text="${condutor.nome}"></td>
-                    <td th:text="${condutor.dataNasc}"></td>
-                    <!--<td th:text="${condutor.idCategoriacnh}"></td>-->
-                    <td th:text="${condutor.endereco}"></td>
-                    <td th:text="${condutor.bairro}"></td>
-                    <td th:text="${condutor.cidade.nome}"></td>
-                    <td th:text="${condutor.situacaoCNH}"></td>
+                    <td th:text="${condutor.idCadastro}" style="white-space: initial"></td>
+                    <td th:text="${condutor.cpf}" style="white-space: initial"></td><td>  </td>
+                    <td align="center" th:text="${condutor.nome}"  style="white-space: initial"></td>
+                    <td th:text="${condutor.dataNasc}" style="white-space: initial"></td>
+                    <td align="center" th:text="${condutor.categoriaCNH.idCategoriaCNH}" style="white-space: initial"></td>
+                    <td align="center" th:text="${condutor.endereco}" style="white-space: initial"></td>
+                    <td align="center" th:text="${condutor.bairro}" style="white-space: initial"></td>
+                    <td align="center" th:text="${condutor.cidade.nome}" style="white-space: initial"></td>
+                    <td align="center" th:text="${condutor.situacaoCNH}"></td>
 
-                 </tr>
+                </tr>
         </tbody>
     </table>
-<a href="/veiculos/inserir-veiculo">Inserir condutor</a>
+<br>
+
+    <!--<a href="condutores/inserir-condutor">INSERIR CONDUTOR</a>-->
+    <input type="button" value="InserirCondutor"
+           onclick="window.location='/veiculos/inserir-veiculo';" />
+    <!--<a href="/veiculos/inserir-veiculo">Inserir condutor</a>-->
 </body>
 </html>

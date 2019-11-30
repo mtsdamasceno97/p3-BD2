@@ -2,7 +2,6 @@ package br.edu.ifpb.p3bd2.modelo;
 
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
-
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
@@ -42,4 +41,6 @@ public class Veiculo {
 	@Column(length = 1, name = "situacao")
 	private Situacao situacao;
 
+	public void setRenavam(String gerarRenavam) {
+	}
 }

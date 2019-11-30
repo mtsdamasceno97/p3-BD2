@@ -38,7 +38,6 @@ FROM infracao inf JOIN multa mt ON inf.idInfracao = mt.idInfracao
 GROUP BY ano, mes
 ORDER BY ano);
 
-
 ---- FUNÇÕES/PROCEDURES/TRIGGERS
 
 --RENAVAM
@@ -74,18 +73,18 @@ LANGUAGE plpgsql;
 -- SUSPENSÃO CNH
 
 CREATE OR REPLACE FUNCTION susp_cnh()
-RETURNS trigger
+RETURNS TRIGGER
 AS $$
 DECLARE
 	a integer;	
 BEGIN
-		a := (select pontos_infracoes FROM condutor_carteira
-		WHERE Condutor = new.idCondutor);							
-		IF(a >= 20) THEN
-			UPDATE condutor SET situacaoCNH = 'S'
-			WHERE idCadastro = NEW.idCondutor;			
-		END IF;		 
-		RETURN NULL;
+	a := (SELECT pontos_infracoes FROM condutor_carteira
+	WHERE Condutor = new.idCondutor);							
+	IF(a >= 20) THEN
+		UPDATE condutor SET situacaoCNH = 'S'
+		WHERE idCadastro = NEW.idCondutor;			
+	END IF;		 
+	RETURN NULL;
 END; $$ 
 LANGUAGE plpgsql; 
  
@@ -96,18 +95,18 @@ FOR EACH ROW EXECUTE PROCEDURE susp_cnh();
 -- TRANSFERÊNCIA DE PROPRIETÁRIO
 
 CREATE OR REPLACE FUNCTION edicao_proprietario()
-RETURNS trigger
+RETURNS TRIGGER
 AS $$
 DECLARE
 	aux date;
 BEGIN
 	aux := current_date;
-    insert into transferencia(renavam, idproprietario, datacompra, datavenda)
-	values (new.renavam, new.idProprietario, new.dataAquisicao, aux);
+    INSERT INTO transferencia(renavam, idproprietario, datacompra, datavenda) 
+	VALUES (NEW.renavam, OLD.idProprietario, NEW.dataAquisicao, aux);
 	NEW.dataAquisicao := aux;
-    return new;
-END;
-$$ LANGUAGE plpgsql;
+    return NEW;
+END; $$ 
+LANGUAGE plpgsql;
 
 CREATE TRIGGER executa_edicao_proprietario
 BEFORE UPDATE ON veiculo
@@ -116,17 +115,16 @@ FOR EACH ROW EXECUTE PROCEDURE edicao_proprietario();
 -- TRIGGER PARA CONTROLE DE ALTERAÇÃO DA MULTA DO CONDUTOR
 
 CREATE OR REPLACE FUNCTION alterar_multa_condutor()
-RETURNS trigger
+RETURNS TRIGGER
 AS $$
 DECLARE
-BEGIN
-		if((SELECT current_date) > old.datavencimento) then
-			raise exception 'A data para alteração foi excedida';
-		end if;
-		return NULL;
+BEGIN							
+	if((SELECT current_date) > old.datavencimento) THEN
+		raise EXCEPTION 'A data para alteração foi excedida';			
+	end if;		 
+	return NULL;
 END; $$
 LANGUAGE plpgsql;
-
 
 CREATE TRIGGER executa_mudanca_condutor
 BEFORE UPDATE ON multa
@@ -165,3 +163,41 @@ BEGIN
 	WHERE vc.renavam = renavam_aux
 	ORDER BY dataCompra, dataVenda;
 END; $$
+
+-- 1- Função calcula juros e valor final da multa
+-- 2- Função que paga a multa, setando os valores dos campos.
+
+-- 1
+CREATE OR REPLACE PROCEDURE aplicacao_juros(idm integer)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+	dias integer;
+	valor_multa numeric;
+	juros_multa numeric;
+	valorfinal numeric;
+BEGIN
+	dias := (CURRENT_DATE - (SELECT datavencimento FROM multa WHERE idmulta = idm));	
+	valor_multa := (SELECT valor FROM multa WHERE idMulta = idm);
+	juros_multa := TRUNC((valor_multa * 0.01) * dias, 2);
+	valorfinal := TRUNC(b + juros_multa, 2);
+	
+	UPDATE multa SET juros = juros_multa WHERE idMulta = idm;
+	UPDATE multa SET valorFinal = valorfinal WHERE idMulta = idm;
+
+END $$;
+
+-- 2
+CREATE OR REPLACE PROCEDURE pagar_multa(idm integer)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+   aux date;	
+BEGIN	
+	aux := CURRENT_DATE;
+	
+	call aplicacao_juros(idm);
+	UPDATE multa SET pago = 'S' WHERE idMulta = (SELECT idMulta FROM multa WHERE idMulta = idm);
+	UPDATE multa SET dataPagamento = aux WHERE idmulta = idm;
+
+END $$;

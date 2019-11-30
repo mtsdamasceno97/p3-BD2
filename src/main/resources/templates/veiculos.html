@@ -3,36 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <title>Listagem dos Veículos</title>
+    <link rel="stylesheet" th:href="@{/assets/css/estilo.css}">
+    <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+
 </head>
 <body>
-    <h1>Listagem de veículos cadastrados</h1>
-    <table>
-        <thead>
-            <tr>
-                <td>Renavam</td>
-                <td>Placa</td>
-                <td>Ano</td>
-                <td>Data de Compra</td>
-                <td>Data de Aquisição</td>
-                <td>Valor</td>
-                <td>Situação</td>
-            </tr>
-        </thead>
-        <tbody>
+
+
+    <div class="wrapper">
+        <div class="sidebar">
+            <h2>BNT - IFPB</h2>
+            <ul>
+
+                <li><a href="/home"><i class="fas fa-home"></i>HOME</a></li>
+                <li><a href="/veiculos"><i class="fas fa-car"></i>VEICULOS</a></li>
+                <li><a href="/condutores"><i class="fas fa-user-alt"></i>CONDUTORES</a></li>
+                <li><a href="/multa"><i class="fas fa-clipboard-list"></i>MULTAS</a></li>
+
+            </ul>
+        </div>
+        <div class="main_content">
+            <div class="header">BNT</div>
+
+        </div>
+
+
+        <div class="main_content2">
+
+                    <table align="center" border="1" cellpadding="5">
+                        <thead>
+                            <tr>
+                                <td><h4>Renavam</h4></td>
+                                <td><h4>Placa</h4></td>
+                                <td><h4>Ano</h4></td>
+                                <td><h4>Data de Compra</h4></td>
+                                <td><h4>Data de Aquisição</h4></td>
+                                <td><h4>Valor</h4></td>
+                                <td><h4>Situação</h4></td>
+                            </tr>
+                        </thead>
+                        <tbody align="center">
 
 
 
-            <tr th:each="veiculo : ${veiculos}">
-                <td th:text="${veiculo.renavam}"></td>
-                <td th:text="${veiculo.placa}"></td>
-                <td th:text="${veiculo.ano}"></td>
-                <td th:text="${veiculo.dataCompra}"></td>
-                <td th:text="${veiculo.dataAquisicao}"></td>
-                <td th:text="${veiculo.valor}"></td>
-                <td th:text="${veiculo.situacao}"></td>
-            </tr>
-        </tbody>
-    </table>
-    <a href="/veiculos/inserir-veiculo">Inserir veículo</a>
+                            <tr th:each="veiculo : ${veiculos}">
+                                <td th:text="${veiculo.renavam}"></td>
+                                <td th:text="${veiculo.placa}"></td>
+                                <td th:text="${veiculo.ano}"></td>
+                                <td th:text="${veiculo.dataCompra}"></td>
+                                <td th:text="${veiculo.dataAquisicao}"></td>
+                                <td th:text="${veiculo.valor}"></td>
+                                <td th:text="${veiculo.situacao}"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <a href="/veiculos/inserir-veiculo">Inserir veículo</a>
+        </div>
+    </div>
 </body>
 </html>

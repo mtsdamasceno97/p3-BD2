@@ -3,51 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <title>Listagem das multas cadastradas</title>
+    <link rel="stylesheet" th:href="@{/assets/css/estilo.css}">
+    <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
 </head>
 <body>
-<h1>MULTAS CADASTRADOS</h1>
-<table width=100%>
-    <thead>
-    <tr height=11%>
-        <td align="center" ><h3>ID</h3></td>
-        <td align="center"><h3>RENAVAM</h3></td><td></td>
-        <td align="center"><h3>DESCRICAO</h3></td>
-        <td align="center"><h3>CONDUTOR</h3></td>
-        <td align="center"><h3>dINFRACAO</h3></td>
-        <td align="center"><h3>dVENCIMENTO</h3></td>
-        <td align="center"><h3>dPAGAMENTO</h3></td>
-        <td align="center"><h3>VALOR</h3></td>
-        <td align="center"><h3>JUROS</h3></td>
-        <td align="center"><h3>VFINAL</h3></td>
-        <td align="center"><h3>PAGO</h3></td>
-    </tr>
-    </thead>
-    <tbody>
+
+        <div class="wrapper">
+            <div class="sidebar">
+                <h2>BNT - IFPB</h2>
+                <ul>
+
+                    <li><a href="/home"><i class="fas fa-home"></i>HOME</a></li>
+                    <li><a href="/veiculos"><i class="fas fa-car"></i>VEICULOS</a></li>
+                    <li><a href="/condutores"><i class="fas fa-user-alt"></i>CONDUTORES</a></li>
+                    <li><a href="/multa"><i class="fas fa-clipboard-list"></i>MULTAS</a></li>
+
+                </ul>
+            </div>
+            <div class="main_content">
+                <div class="header">BNT</div>
+
+
+            </div>
+
+            <div class="main_content3" align="center">
+
+                    <table width=100% border="1" cellpadding="5">
+                            <thead>
+                                <tr height=11%>
+                                    <td align="center" ><h4>ID</h4></td>
+                                    <td align="center"><h4>RENAVAM</h4></td><td></td>
+                                    <td align="center"><h4>DESCRICAO</h4></td>
+                                    <td align="center"><h4>CONDUTOR</h4></td>
+                                    <td align="center"><h4>dINFRACAO</h4></td>
+                                    <td align="center"><h4>dVENCIMENTO</h4></td>
+                                    <td align="center"><h4>dPAGAMENTO</h4></td>
+                                    <td align="center"><h4>VALOR</h4></td>
+                                    <td align="center"><h4>JUROS</h4></td>
+                                    <td align="center"><h4>VFINAL</h4></td>
+                                    <td align="center"><h4>PAGO</h4></td>
+                                </tr>
+                            </thead>
+                        <tbody>
 
 
 
-    <tr th:each="multa : ${multas}" >
+                            <tr th:each="multa : ${multas}" >
 
-        <td th:text="${multa.idMulta}" style="white-space: initial"></td>
-        <td th:text="${multa.renavam}" style="white-space: initial"></td><td>  </td>
-        <td align="center" th:text="${multa.idInfracao.descricao}"  style="white-space: initial"></td>
-        <td th:text="${multa.idCondutor.nome}" style="white-space: initial"></td>
-        <td align="center" th:text="${multa.dataInfracao}" style="white-space: initial"></td>
-        <td align="center" th:text="${multa.dataVencimento}" style="white-space: initial"></td>
-        <td align="center" th:text="${multa.dataPagamento}" style="white-space: initial"></td>
-        <td align="center" th:text="${multa.valor}" style="white-space: initial"></td>
-        <td align="center" th:text="${multa.juros}"></td>
-        <td align="center" th:text="${multa.valorFinal}"></td>
-        <td align="center" th:text="${multa.pago}"></td>
+                                <td th:text="${multa.idMulta}" style="white-space: initial"></td>
+                                <td th:text="${multa.renavam}" style="white-space: initial"></td><td>  </td>
+                                <td align="center" th:text="${multa.idInfracao.descricao}"  style="white-space: initial"></td>
+                                <td th:text="${multa.idCondutor.nome}" style="white-space: initial"></td>
+                                <td align="center" th:text="${multa.dataInfracao}" style="white-space: initial"></td>
+                                <td align="center" th:text="${multa.dataVencimento}" style="white-space: initial"></td>
+                                <td align="center" th:text="${multa.dataPagamento}" style="white-space: initial"></td>
+                                <td align="center" th:text="${multa.valor}" style="white-space: initial"></td>
+                                <td align="center" th:text="${multa.juros}"></td>
+                                <td align="center" th:text="${multa.valorFinal}"></td>
+                                <td align="center" th:text="${multa.pago}"></td>
 
-    </tr>
-    </tbody>
-</table>
-<br>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <input type="button" value="InserirMulta" onclick="window.location='/veiculos/inserir-veiculo';" />
+            </div>
+            <br>
+        </div>
 
-<!--<a href="condutores/inserir-condutor">INSERIR CONDUTOR</a>-->
-<input type="button" value="InserirMulta"
-       onclick="window.location='/veiculos/inserir-veiculo';" />
-<!--<a href="/veiculos/inserir-veiculo">Inserir condutor</a>-->
+        <!--<a href="condutores/inserir-condutor">INSERIR CONDUTOR</a>-->
+
+        <!--<a href="/veiculos/inserir-veiculo">Inserir condutor</a>-->
 </body>
 </html>

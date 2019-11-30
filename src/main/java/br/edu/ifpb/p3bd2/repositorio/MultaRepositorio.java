@@ -7,8 +7,5 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface MultaRepositorio extends CrudRepository <Multa, String> {
 
-    @Transactional
-    @Procedure(procedureName = "renavam")
-    String gerarRenavam();
 
 }

@@ -78,13 +78,13 @@ AS $$
 DECLARE
 	a integer;	
 BEGIN
-		a := (SELECT pontos_infracoes FROM condutor_carteira
-		WHERE Condutor = new.idCondutor);							
-		IF(a >= 20) THEN
-			UPDATE condutor SET situacaoCNH = 'S'
-			WHERE idCadastro = NEW.idCondutor;			
-		END IF;		 
-		RETURN NULL;
+	a := (SELECT pontos_infracoes FROM condutor_carteira
+	WHERE Condutor = new.idCondutor);							
+	IF(a >= 20) THEN
+		UPDATE condutor SET situacaoCNH = 'S'
+		WHERE idCadastro = NEW.idCondutor;			
+	END IF;		 
+	RETURN NULL;
 END; $$ 
 LANGUAGE plpgsql; 
  
@@ -102,11 +102,11 @@ DECLARE
 BEGIN
 	aux := current_date;
     INSERT INTO transferencia(renavam, idproprietario, datacompra, datavenda) 
-	VALUES (new.renavam, new.idProprietario, new.dataAquisicao, aux);
+	VALUES (NEW.renavam, OLD.idProprietario, NEW.dataAquisicao, aux);
 	NEW.dataAquisicao := aux;
-    return new;
-END;
-$$ LANGUAGE plpgsql;
+    return NEW;
+END; $$ 
+LANGUAGE plpgsql;
 
 CREATE TRIGGER executa_edicao_proprietario
 BEFORE UPDATE ON veiculo
@@ -119,13 +119,12 @@ RETURNS TRIGGER
 AS $$
 DECLARE
 BEGIN							
-		if((SELECT current_date) > old.datavencimento) THEN
-			raise EXCEPTION 'A data para alteração foi excedida';			
-		end if;		 
-		return NULL;
+	if((SELECT current_date) > old.datavencimento) THEN
+		raise EXCEPTION 'A data para alteração foi excedida';			
+	end if;		 
+	return NULL;
 END; $$
 LANGUAGE plpgsql;
-
 
 CREATE TRIGGER executa_mudanca_condutor
 BEFORE UPDATE ON multa
@@ -133,23 +132,6 @@ FOR EACH ROW
 WHEN (OLD.idcondutor IS DISTINCT FROM NEW.idcondutor)
 EXECUTE PROCEDURE alterar_condutor();
 
-<<<<<<< HEAD
--- PAGAR MULTA (Incompleto)
-
-create or replace procedure pagar_multa(multa_a_pagar integer)
-language plpgsql
-as $$
-declare
-begin	
-	--Pagando multa
-	update multa set pago = 'S'
-	where idMulta = (select idMulta from multa where idMulta = multa_a_pagar);
-	
-end $$;
-
-
-
-=======
 -- FUNÇÃO RETORNAR HISTORICO DATA/COMPRA PASSANDO ALGUM RENAVAM
 
 CREATE FUNCTION return_tabble (renavam_aux char(11))
@@ -182,48 +164,40 @@ BEGIN
 	ORDER BY dataCompra, dataVenda;
 END; $$
 
---- 1- Função calcula juros e valor final da multa | 2- Função que paga a multa, setando os valores dos campos.
+-- 1- Função calcula juros e valor final da multa
+-- 2- Função que paga a multa, setando os valores dos campos.
 
 -- 1
-
-create or replace procedure juros_valorFinal_multa(multa_juros integer)
-language plpgsql
-as $$
-declare
-	a integer := 0;
-	b numeric := 0;
-	juros_multa numeric := 0;
-	valorfinal_multa numeric := 0;
-begin
-
-	a:= ((select current_date) - (select datavencimento from multa where idmulta = multa_juros));	
-	b:= (select valor from multa where idmulta = multa_juros);
-	juros_multa := trunc((b * 0.01)*a,2);
-	valorfinal_multa := trunc(b + juros_multa,2);
+CREATE OR REPLACE PROCEDURE aplicacao_juros(idm integer)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+	dias integer;
+	valor_multa numeric;
+	juros_multa numeric;
+	valorfinal numeric;
+BEGIN
+	dias := (CURRENT_DATE - (SELECT datavencimento FROM multa WHERE idmulta = idm));	
+	valor_multa := (SELECT valor FROM multa WHERE idMulta = idm);
+	juros_multa := TRUNC((valor_multa * 0.01) * dias, 2);
+	valorfinal := TRUNC(b + juros_multa, 2);
 	
-	update multa set juros = juros_multa where idmulta = multa_juros;
-	update multa set valorFinal = valorfinal_multa where idmulta = multa_juros;
-end $$;
+	UPDATE multa SET juros = juros_multa WHERE idMulta = idm;
+	UPDATE multa SET valorFinal = valorfinal WHERE idMulta = idm;
+
+END $$;
 
 -- 2
-
-create or replace procedure pagar_multa(multa_a_pagar integer)
-language plpgsql
-as $$
-declare
+CREATE OR REPLACE PROCEDURE pagar_multa(idm integer)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+   aux date;	
+BEGIN	
+	aux := CURRENT_DATE;
 	
-   a date;	
+	call aplicacao_juros(idm);
+	UPDATE multa SET pago = 'S' WHERE idMulta = (SELECT idMulta FROM multa WHERE idMulta = idm);
+	UPDATE multa SET dataPagamento = aux WHERE idmulta = idm;
 
-begin	
-	a:= current_date;
-	
-	call juros_valorFinal_multa(multa_a_pagar);
-	--Pagando multa
-	update multa set pago = 'S'
-	where idMulta = (select idMulta from multa where idMulta = multa_a_pagar);
-		
-
-	update multa set dataPagamento = a
-	where idmulta = multa_a_pagar;	
-
-end $$;
+END $$;

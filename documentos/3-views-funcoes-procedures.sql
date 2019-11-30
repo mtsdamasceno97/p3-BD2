@@ -102,11 +102,11 @@ DECLARE
 BEGIN
 	aux := current_date;
     INSERT INTO transferencia(renavam, idproprietario, datacompra, datavenda) 
-	VALUES (new.renavam, new.idProprietario, new.dataAquisicao, aux);
+	VALUES (NEW.renavam, OLD.idProprietario, NEW.dataAquisicao, aux);
 	NEW.dataAquisicao := aux;
-    return new;
-END;
-$$ LANGUAGE plpgsql;
+    return NEW;
+END; $$ 
+LANGUAGE plpgsql;
 
 CREATE TRIGGER executa_edicao_proprietario
 BEFORE UPDATE ON veiculo
@@ -125,7 +125,6 @@ BEGIN
 	return NULL;
 END; $$
 LANGUAGE plpgsql;
-
 
 CREATE TRIGGER executa_mudanca_condutor
 BEFORE UPDATE ON multa

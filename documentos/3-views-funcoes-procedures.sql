@@ -133,3 +133,19 @@ BEFORE UPDATE ON multa
 FOR EACH ROW 
 WHEN (OLD.idcondutor IS DISTINCT FROM NEW.idcondutor)
 EXECUTE PROCEDURE alterar_condutor();
+
+-- PAGAR MULTA (Incompleto)
+
+create or replace procedure pagar_multa(multa_a_pagar integer)
+language plpgsql
+as $$
+declare
+begin	
+	--Pagando multa
+	update multa set pago = 'S'
+	where idMulta = (select idMulta from multa where idMulta = multa_a_pagar);
+	
+end $$;
+
+
+

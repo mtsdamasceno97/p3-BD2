@@ -182,3 +182,48 @@ BEGIN
 	ORDER BY dataCompra, dataVenda;
 END; $$
 
+--- 1- Função calcula juros e valor final da multa | 2- Função que paga a multa, setando os valores dos campos.
+
+-- 1
+
+create or replace procedure juros_valorFinal_multa(multa_juros integer)
+language plpgsql
+as $$
+declare
+	a integer := 0;
+	b numeric := 0;
+	juros_multa numeric := 0;
+	valorfinal_multa numeric := 0;
+begin
+
+	a:= ((select current_date) - (select datavencimento from multa where idmulta = multa_juros));	
+	b:= (select valor from multa where idmulta = multa_juros);
+	juros_multa := trunc((b * 0.01)*a,2);
+	valorfinal_multa := trunc(b + juros_multa,2);
+	
+	update multa set juros = juros_multa where idmulta = multa_juros;
+	update multa set valorFinal = valorfinal_multa where idmulta = multa_juros;
+end $$;
+
+-- 2
+
+create or replace procedure pagar_multa(multa_a_pagar integer)
+language plpgsql
+as $$
+declare
+	
+   a date;	
+
+begin	
+	a:= current_date;
+	
+	call juros_valorFinal_multa(multa_a_pagar);
+	--Pagando multa
+	update multa set pago = 'S'
+	where idMulta = (select idMulta from multa where idMulta = multa_a_pagar);
+		
+
+	update multa set dataPagamento = a
+	where idmulta = multa_a_pagar;	
+
+end $$;

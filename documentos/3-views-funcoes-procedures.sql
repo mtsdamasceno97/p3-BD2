@@ -38,7 +38,6 @@ FROM infracao inf JOIN multa mt ON inf.idInfracao = mt.idInfracao
 GROUP BY ano, mes
 ORDER BY ano);
 
-
 ---- FUNÇÕES/PROCEDURES/TRIGGERS
 
 --RENAVAM
@@ -74,12 +73,12 @@ LANGUAGE plpgsql;
 -- SUSPENSÃO CNH
 
 CREATE OR REPLACE FUNCTION susp_cnh()
-RETURNS trigger
+RETURNS TRIGGER
 AS $$
 DECLARE
 	a integer;	
 BEGIN
-		a := (select pontos_infracoes FROM condutor_carteira
+		a := (SELECT pontos_infracoes FROM condutor_carteira
 		WHERE Condutor = new.idCondutor);							
 		IF(a >= 20) THEN
 			UPDATE condutor SET situacaoCNH = 'S'
@@ -96,14 +95,14 @@ FOR EACH ROW EXECUTE PROCEDURE susp_cnh();
 -- TRANSFERÊNCIA DE PROPRIETÁRIO
 
 CREATE OR REPLACE FUNCTION edicao_proprietario()
-RETURNS trigger
+RETURNS TRIGGER
 AS $$
 DECLARE
 	aux date;
 BEGIN
 	aux := current_date;
-    insert into transferencia(renavam, idproprietario, datacompra, datavenda) 
-	values (new.renavam, new.idProprietario, new.dataAquisicao, aux);
+    INSERT INTO transferencia(renavam, idproprietario, datacompra, datavenda) 
+	VALUES (new.renavam, new.idProprietario, new.dataAquisicao, aux);
 	NEW.dataAquisicao := aux;
     return new;
 END;
@@ -116,12 +115,12 @@ FOR EACH ROW EXECUTE PROCEDURE edicao_proprietario();
 -- TRIGGER PARA CONTROLE DE ALTERAÇÃO DA MULTA DO CONDUTOR
 
 CREATE OR REPLACE FUNCTION alterar_multa_condutor()
-RETURNS trigger
+RETURNS TRIGGER
 AS $$
 DECLARE
 BEGIN							
-		if((SELECT current_date) > old.datavencimento) then
-			raise exception 'A data para alteração foi excedida';			
+		if((SELECT current_date) > old.datavencimento) THEN
+			raise EXCEPTION 'A data para alteração foi excedida';			
 		end if;		 
 		return NULL;
 END; $$ 

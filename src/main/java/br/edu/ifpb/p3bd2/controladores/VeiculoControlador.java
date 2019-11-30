@@ -29,8 +29,9 @@ public class VeiculoControlador {
 
 	@PostMapping
 	public String inserirVeiculo(@ModelAttribute Veiculo veiculo) {
-		System.out.println(veiculo);
-		return "veiculos";
+		veiculo.setRenavam(this.veiculoRepositorio.gerarRenavam());
+	    this.veiculoRepositorio.save(veiculo);
+		return "redirect:veiculos";
 	}
 
 	@GetMapping("/inserir-veiculo")

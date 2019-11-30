@@ -44,14 +44,14 @@ ORDER BY ano);
 --RENAVAM
 
 CREATE OR REPLACE FUNCTION renavam()
-RETURNS CHAR(13) 
+RETURNS varchar(11)
 AS $$
 DECLARE
 	numero integer;
 	soma integer;
 	retorno integer;
 	i integer := 0;
-	renavam char(13);
+	renavam char(11);
 	fator integer [] := array [3,2,9,8,7,6,5,4,3,2];
 BEGIN
 	LOOP
@@ -98,42 +98,43 @@ FOR EACH ROW EXECUTE PROCEDURE susp_cnh();
 CREATE OR REPLACE FUNCTION edicao_proprietario()
 RETURNS trigger
 AS $$
-    begin
-        insert into transferencia(renavam,idproprietario,datacompra,datavenda) values (OLD.renavam, OLD.idProprietario,OLD.dataCompra,new.dataaquisicao);
-        return old;
-    end;
+DECLARE
+	aux date;
+BEGIN
+	aux := current_date;
+    insert into transferencia(renavam, idproprietario, datacompra, datavenda)
+	values (new.renavam, new.idProprietario, new.dataAquisicao, aux);
+	NEW.dataAquisicao := aux;
+    return new;
+END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER executa_edicao_proprietario
-AFTER UPDATE ON veiculo
-    FOR EACH ROW EXECUTE PROCEDURE edicao_proprietario();
+BEFORE UPDATE ON veiculo
+FOR EACH ROW EXECUTE PROCEDURE edicao_proprietario();
 
--- TRIGGER PARA CONTROLE DE ALTERAÇÃO DO CONDUTOR
+-- TRIGGER PARA CONTROLE DE ALTERAÇÃO DA MULTA DO CONDUTOR
 
-
-CREATE OR REPLACE FUNCTION alterar_condutor()
+CREATE OR REPLACE FUNCTION alterar_multa_condutor()
 RETURNS trigger
 AS $$
-
-declare
-begin
-							
-		if((select current_date) > old.datavencimento) then
+DECLARE
+BEGIN
+		if((SELECT current_date) > old.datavencimento) then
 			raise exception 'A data para alteração foi excedida';
-			
 		end if;
-		 
 		return NULL;
-end; $$ 
+END; $$
 LANGUAGE plpgsql;
 
- 
+
 CREATE TRIGGER executa_mudanca_condutor
 BEFORE UPDATE ON multa
-FOR EACH ROW 
+FOR EACH ROW
 WHEN (OLD.idcondutor IS DISTINCT FROM NEW.idcondutor)
 EXECUTE PROCEDURE alterar_condutor();
 
+<<<<<<< HEAD
 -- PAGAR MULTA (Incompleto)
 
 create or replace procedure pagar_multa(multa_a_pagar integer)
@@ -148,4 +149,37 @@ begin
 end $$;
 
 
+
+=======
+-- FUNÇÃO RETORNAR HISTORICO DATA/COMPRA PASSANDO ALGUM RENAVAM
+
+CREATE FUNCTION return_tabble (renavam_aux char(11))
+RETURNS TABLE (
+	renavam char(11),
+	marca varchar(40),
+	modelo varchar(40),
+	ano integer,
+	proprietario varchar(50),
+	dataCompra date,
+	dataVenda date
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+BEGIN
+	RETURN QUERY
+	SELECT vc.renavam,
+			mc.nome,
+			md.denominacao,
+			vc.ano,
+			cd.nome,
+			tf.dataCompra,
+			tf.dataVenda
+	FROM condutor cd JOIN transferencia tf ON cd.idCadastro = tf.idProprietario
+	JOIN veiculo vc ON vc.renavam = tf.renavam
+	JOIN modelo md ON md.idModelo = vc.idModelo
+	JOIN marca mc ON mc.idMarca = md.idMarca
+	WHERE vc.renavam = renavam_aux
+	ORDER BY dataCompra, dataVenda;
+END; $$
 

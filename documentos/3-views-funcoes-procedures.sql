@@ -43,7 +43,7 @@ ORDER BY ano);
 --RENAVAM
 
 CREATE OR REPLACE FUNCTION renavam()
-RETURNS char(11) 
+RETURNS varchar(11)
 AS $$
 DECLARE
 	numero integer;
@@ -123,16 +123,33 @@ BEGIN
 			raise EXCEPTION 'A data para alteração foi excedida';			
 		end if;		 
 		return NULL;
-END; $$ 
+END; $$
 LANGUAGE plpgsql;
 
- 
+
 CREATE TRIGGER executa_mudanca_condutor
 BEFORE UPDATE ON multa
-FOR EACH ROW 
+FOR EACH ROW
 WHEN (OLD.idcondutor IS DISTINCT FROM NEW.idcondutor)
 EXECUTE PROCEDURE alterar_condutor();
 
+<<<<<<< HEAD
+-- PAGAR MULTA (Incompleto)
+
+create or replace procedure pagar_multa(multa_a_pagar integer)
+language plpgsql
+as $$
+declare
+begin	
+	--Pagando multa
+	update multa set pago = 'S'
+	where idMulta = (select idMulta from multa where idMulta = multa_a_pagar);
+	
+end $$;
+
+
+
+=======
 -- FUNÇÃO RETORNAR HISTORICO DATA/COMPRA PASSANDO ALGUM RENAVAM
 
 CREATE FUNCTION return_tabble (renavam_aux char(11))
@@ -151,11 +168,11 @@ DECLARE
 BEGIN
 	RETURN QUERY
 	SELECT vc.renavam,
-			mc.nome, 
+			mc.nome,
 			md.denominacao,
 			vc.ano,
 			cd.nome,
-			tf.dataCompra, 
+			tf.dataCompra,
 			tf.dataVenda
 	FROM condutor cd JOIN transferencia tf ON cd.idCadastro = tf.idProprietario
 	JOIN veiculo vc ON vc.renavam = tf.renavam
@@ -164,3 +181,4 @@ BEGIN
 	WHERE vc.renavam = renavam_aux
 	ORDER BY dataCompra, dataVenda;
 END; $$
+

@@ -7,8 +7,8 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
-@Entity
 @Data
+@Entity
 public class Veiculo {
 
 	private enum Situacao {
@@ -16,8 +16,8 @@ public class Veiculo {
 	}
 
 	@Id
-	@Size(min = 13, max = 13)
-	@Column(length = 13, name = "renavam")
+	@Size(min = 11, max = 11)
+	@Column(length = 11, name = "renavam")
 	private String renavam;
 
 	@Size(min = 7, max = 7)

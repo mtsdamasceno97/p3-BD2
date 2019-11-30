@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Listagem das multas cadastradas</title>
+</head>
+<body>
+<h1>MULTAS CADASTRADOS</h1>
+<table width=100%>
+    <thead>
+    <tr height=11%>
+        <td align="center" ><h3>ID</h3></td>
+        <td align="center"><h3>RENAVAM</h3></td><td></td>
+        <td align="center"><h3>DESCRICAO</h3></td>
+        <td align="center"><h3>CONDUTOR</h3></td>
+        <td align="center"><h3>dINFRACAO</h3></td>
+        <td align="center"><h3>dVENCIMENTO</h3></td>
+        <td align="center"><h3>dPAGAMENTO</h3></td>
+        <td align="center"><h3>VALOR</h3></td>
+        <td align="center"><h3>JUROS</h3></td>
+        <td align="center"><h3>VFINAL</h3></td>
+        <td align="center"><h3>PAGO</h3></td>
+    </tr>
+    </thead>
+    <tbody>
+
+
+
+    <tr th:each="multa : ${multas}" >
+
+        <td th:text="${multa.idMulta}" style="white-space: initial"></td>
+        <td th:text="${multa.renavam}" style="white-space: initial"></td><td>  </td>
+        <td align="center" th:text="${multa.idInfracao.descricao}"  style="white-space: initial"></td>
+        <td th:text="${multa.idCondutor.nome}" style="white-space: initial"></td>
+        <td align="center" th:text="${multa.dataInfracao}" style="white-space: initial"></td>
+        <td align="center" th:text="${multa.dataVencimento}" style="white-space: initial"></td>
+        <td align="center" th:text="${multa.dataPagamento}" style="white-space: initial"></td>
+        <td align="center" th:text="${multa.valor}" style="white-space: initial"></td>
+        <td align="center" th:text="${multa.juros}"></td>
+        <td align="center" th:text="${multa.valorFinal}"></td>
+        <td align="center" th:text="${multa.pago}"></td>
+
+    </tr>
+    </tbody>
+</table>
+<br>
+
+<!--<a href="condutores/inserir-condutor">INSERIR CONDUTOR</a>-->
+<input type="button" value="InserirMulta"
+       onclick="window.location='/veiculos/inserir-veiculo';" />
+<!--<a href="/veiculos/inserir-veiculo">Inserir condutor</a>-->
+</body>
+</html>

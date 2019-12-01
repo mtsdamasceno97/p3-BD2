@@ -27,7 +27,7 @@ CREATE TABLE especie (
 CREATE TABLE categoria_veiculos (
 	idCategoria serial NOT NULL,
 	descricao varchar(30) NOT NULL,
-	idEspecie serial NOT NULL,
+	idEspecie integer NOT NULL,
 	CONSTRAINT PK_categoria_veiculo PRIMARY KEY (idCategoria),
 	CONSTRAINT FK_categoria_veiculo_especie FOREIGN KEY (idEspecie) REFERENCES especie
 );
@@ -48,8 +48,8 @@ CREATE TABLE marca (
 CREATE TABLE modelo (
 	idModelo serial NOT NULL,
 	denominacao varchar(40) NOT NULL,
-	idMarca serial NOT NULL,
-	idTipo serial NOT NULL,
+	idMarca integer NOT NULL,
+	idTipo integer NOT NULL,
 	CONSTRAINT PK_modelo PRIMARY KEY (idModelo),
 	CONSTRAINT FK_modelo_tipo FOREIGN KEY (idTipo) REFERENCES tipo,
 	CONSTRAINT FK_modelo_marca FOREIGN KEY (idMarca) REFERENCES marca
@@ -71,7 +71,7 @@ CREATE TABLE condutor (
 	idCategoriaCNH char(3) NOT NULL,
 	endereco varchar(50) NOT NULL,
 	bairro varchar(60) NOT NULL,
-	idCidade serial NOT NULL,
+	idCidade integer NOT NULL,
 	situacaoCNH char(1) NOT NULL DEFAULT 'R',
 	CONSTRAINT PK_prop PRIMARY KEY (idCadastro),
 	CONSTRAINT CK_prop_sit CHECK (situacaoCNH='R' OR situacaoCNH='S'),
@@ -83,10 +83,10 @@ CREATE TABLE veiculo (
 	renavam char(11) NOT NULL,
 	placa char(7) NOT NULL,
 	ano int NOT NULL,
-	idCategoria serial NOT NULL,
-	idProprietario serial NOT NULL,
-	idModelo serial NOT NULL,
-	idCidade serial NOT NULL,
+	idCategoria integer NOT NULL,
+	idProprietario integer NOT NULL,
+	idModelo integer NOT NULL,
+	idCidade integer NOT NULL,
 	dataCompra date NOT NULL,
 	dataAquisicao date NOT NULL,
 	valor float NOT NULL,
@@ -113,8 +113,8 @@ CREATE TABLE licenciamento (
 CREATE TABLE multa (
 	idMulta serial NOT NULL,
 	renavam char(11) NOT NULL,
-	idInfracao serial NOT NULL,
-	idCondutor serial NOT NULL,
+	idInfracao integer NOT NULL,
+	idCondutor integer NOT NULL,
 	dataInfracao date NOT NULL,
 	dataVencimento date NOT NULL,
 	dataPagamento date,
@@ -132,7 +132,7 @@ CREATE TABLE multa (
 CREATE TABLE transferencia (
 	idHistorico serial NOT NULL,
 	renavam char(11) NOT NULL,
-	idProprietario serial NOT NULL,
+	idProprietario integer NOT NULL,
 	dataCompra date NOT NULL,
 	dataVenda date,
 	CONSTRAINT PK_transferencia PRIMARY KEY (idHistorico),

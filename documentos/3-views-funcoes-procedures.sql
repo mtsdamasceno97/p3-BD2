@@ -398,14 +398,14 @@ LOOP
 
 	FETCH cursorVeiculo INTO linhaV;
 	EXIT WHEN NOT FOUND;
-	RAISE NOTICE 'renavam da tabela veiculo %', linhaV.renavam;
+	
 	--Abrindo o cursor para licenciamento
 	OPEN cursorLicenciamento(linhaV.renavam);
 
 	LOOP 
 
 		FETCH cursorLicenciamento INTO linhaL;
-		RAISE NOTICE 'renavam da tabela licenciamento %', linhaL.renavam;
+		
 		if linhal.renavam=linhaV.renavam then
 			call verificacondicao(linhal.pago,linhaL.datavenc,linhaL.renavam);
 			exit;

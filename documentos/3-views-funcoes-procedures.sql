@@ -9,7 +9,7 @@ CREATE OR REPLACE VIEW condutor_carteira AS
 		date_part('year', mt.dataInfracao) ano_infracao
 FROM condutor cdt JOIN multa mt ON cdt.idCadastro = mt.idCondutor
 JOIN infracao inf ON inf.idInfracao = mt.idInfracao
-GROUP BY Ano, Condutor);
+GROUP BY ano_infracao, Condutor);
 
 --VIEW 2:
 CREATE OR REPLACE VIEW veiculo_condutor AS
@@ -43,7 +43,7 @@ ORDER BY ano);
 --RENAVAM
 
 CREATE OR REPLACE FUNCTION renavam()
-RETURNS varchar(11)
+RETURNS char(11)
 AS $$
 DECLARE
 	numero integer;
@@ -94,7 +94,7 @@ FOR EACH ROW EXECUTE PROCEDURE susp_cnh();
 
 -- TRANSFERÊNCIA DE PROPRIETÁRIO
 
-CREATE OR REPLACE FUNCTION edicao_proprietario()
+CREATE OR REPLACE FUNCTION transf_proprietario()
 RETURNS TRIGGER
 AS $$
 DECLARE
@@ -108,9 +108,9 @@ BEGIN
 END; $$ 
 LANGUAGE plpgsql;
 
-CREATE TRIGGER executa_edicao_proprietario
+CREATE TRIGGER executa_transf_proprietario
 BEFORE UPDATE ON veiculo
-FOR EACH ROW EXECUTE PROCEDURE edicao_proprietario();
+FOR EACH ROW EXECUTE PROCEDURE transf_proprietario();
 
 -- TRIGGER PARA CONTROLE DE ALTERAÇÃO DA MULTA DO CONDUTOR
 
@@ -119,7 +119,7 @@ RETURNS TRIGGER
 AS $$
 DECLARE
 BEGIN							
-	if((SELECT current_date) > old.datavencimento) THEN
+	if((SELECT current_date) > old.dataVencimento) THEN
 		raise EXCEPTION 'A data para alteração foi excedida';			
 	end if;		 
 	return NULL;
@@ -130,7 +130,7 @@ CREATE TRIGGER executa_mudanca_condutor
 BEFORE UPDATE ON multa
 FOR EACH ROW
 WHEN (OLD.idcondutor IS DISTINCT FROM NEW.idcondutor)
-EXECUTE PROCEDURE alterar_condutor();
+EXECUTE PROCEDURE alterar_multa_condutor();
 
 -- FUNÇÃO RETORNAR HISTORICO DATA/COMPRA PASSANDO ALGUM RENAVAM
 
@@ -168,36 +168,126 @@ END; $$
 -- 2- Função que paga a multa, setando os valores dos campos.
 
 -- 1
-CREATE OR REPLACE PROCEDURE aplicacao_juros(idm integer)
-LANGUAGE plpgsql
+CREATE OR REPLACE FUNCTION aplicacao_juros()
+RETURNS TRIGGER
 AS $$
 DECLARE
 	dias integer;
 	valor_multa numeric;
 	juros_multa numeric;
-	valorfinal numeric;
+	valorfinal_multa numeric;
+	vencimento date;
 BEGIN
-	dias := (CURRENT_DATE - (SELECT datavencimento FROM multa WHERE idmulta = idm));	
-	valor_multa := (SELECT valor FROM multa WHERE idMulta = idm);
+	vencimento := (SELECT NEW.datavencimento FROM multa WHERE idMulta = NEW.idMulta);
+	IF CURRENT_DATE > vencimento THEN
+		dias := (CURRENT_DATE - vencimento);
+	ELSE
+		dias := 0;
+	END IF;
+	valor_multa := (SELECT valor FROM multa WHERE idMulta = NEW.idMulta);
 	juros_multa := TRUNC((valor_multa * 0.01) * dias, 2);
-	valorfinal := TRUNC(b + juros_multa, 2);
+	valorfinal_multa := TRUNC(valor_multa + juros_multa, 2);
 	
-	UPDATE multa SET juros = juros_multa WHERE idMulta = idm;
-	UPDATE multa SET valorFinal = valorfinal WHERE idMulta = idm;
+	UPDATE multa SET juros = juros_multa, valorFinal = valorfinal_multa WHERE idMulta = NEW.idMulta;
+	RETURN NEW;
+END; $$
+LANGUAGE plpgsql;
 
-END $$;
+CREATE TRIGGER executa_aplicacao_juros
+AFTER INSERT ON multa
+FOR EACH ROW EXECUTE FUNCTION aplicacao_juros();
 
 -- 2
-CREATE OR REPLACE PROCEDURE pagar_multa(idm integer)
+CREATE OR REPLACE PROCEDURE pagar_multa(idm integer, datapagamento date)
 LANGUAGE plpgsql
 AS $$
 DECLARE
    aux date;	
-BEGIN	
-	aux := CURRENT_DATE;
-	
-	call aplicacao_juros(idm);
-	UPDATE multa SET pago = 'S' WHERE idMulta = (SELECT idMulta FROM multa WHERE idMulta = idm);
-	UPDATE multa SET dataPagamento = aux WHERE idmulta = idm;
-
+BEGIN
+	UPDATE multa SET pago = 'S', dataPagamento = datapagamento WHERE idMulta = idm;
 END $$;
+
+-- DATA DE VENCIMENTO DA MULTA
+
+CREATE OR REPLACE FUNCTION last_day_multa(DATE)
+RETURNS DATE
+LANGUAGE PLPGSQL AS $$
+DECLARE
+	util integer;
+	diaFinal date;
+	dataFinal date;
+BEGIN
+	diaFinal := (date_trunc('DAY', $1) + INTERVAL '40 DAY')::DATE;
+ 	util := date_part('dow', diaFinal);
+	CASE util 
+		WHEN 0 THEN
+			dataFinal := (date_trunc('DAY', $1) + INTERVAL '41 DAY')::DATE;
+		WHEN 6 THEN
+			dataFinal := (date_trunc('DAY', $1) + INTERVAL '42 DAY')::DATE;
+		ELSE
+			RETURN diaFinal;
+	END CASE;
+	RETURN dataFinal;
+END $$;
+
+-- FUNÇÃO PARA RETORNAR ULTIMO DIA UTIL DO MES
+
+CREATE OR REPLACE FUNCTION last_day(DATE)
+RETURNS DATE
+LANGUAGE PLPGSQL AS
+$$
+DECLARE
+	util integer;
+	diaFinal date;
+	dataFinal date;
+BEGIN
+	diaFinal := (date_trunc('MONTH', $1) + INTERVAL '1 MONTH - 1 day')::DATE;
+ 	util := date_part('dow', diaFinal);
+	CASE util 
+		WHEN 0 THEN
+			dataFinal := (date_trunc('MONTH', $1) + INTERVAL '1 MONTH - 3 day')::DATE;
+		WHEN 6 THEN
+			dataFinal := (date_trunc('MONTH', $1) + INTERVAL '1 MONTH - 2 day')::DATE;
+		ELSE
+			RETURN diaFinal;
+	END CASE;
+	RETURN dataFinal;
+END $$;
+
+-- LICENCIAMENTO
+
+CREATE OR REPLACE FUNCTION dataVenc_licenciamento(placa_aux text)
+RETURNS DATE
+LANGUAGE 'plpgsql'
+AS $$
+DECLARE
+	dataFinal date;
+	digito text;
+	digfnl integer;
+BEGIN
+	digfnl := length(placa_aux);
+	digito := substr(placa_aux, digfnl, 1);
+	CASE digito 
+		WHEN '0' THEN 
+			dataFinal := last_day('2019-12-01'::DATE);
+		WHEN '1' THEN 
+			dataFinal := last_day('2019-03-01'::DATE);
+		WHEN '2' THEN 
+			dataFinal := last_day('2019-04-01'::DATE);
+		WHEN '3' THEN 
+			dataFinal := last_day('2019-05-01'::DATE);
+		WHEN '4'THEN 
+			dataFinal := last_day('2019-06-01'::DATE);
+		WHEN '5' THEN 
+			dataFinal := last_day('2019-07-01'::DATE);
+		WHEN '6' THEN 
+			dataFinal := last_day('2019-08-01'::DATE);
+		WHEN '7' THEN 
+			dataFinal := last_day('2019-09-01'::DATE);
+		WHEN '8' THEN 
+			dataFinal := last_day('2019-10-01'::DATE);
+		WHEN '9' THEN 
+			dataFinal := last_day('2019-11-01'::DATE);
+	END CASE;
+	RETURN dataFinal;
+END; $$

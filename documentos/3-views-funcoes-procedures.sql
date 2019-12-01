@@ -72,19 +72,22 @@ LANGUAGE plpgsql;
 
 -- SUSPENSÃO CNH
 
+DROP TRIGGER executa_suspensao_cnh on multa
+
 CREATE OR REPLACE FUNCTION susp_cnh()
 RETURNS TRIGGER
 AS $$
 DECLARE
-	a integer;	
+	pontosinf integer;	
 BEGIN
-	a := (SELECT pontos_infracoes FROM condutor_carteira
-	WHERE Condutor = new.idCondutor);							
-	IF(a >= 20) THEN
-		UPDATE condutor SET situacaoCNH = 'S'
-		WHERE idCadastro = NEW.idCondutor;			
-	END IF;		 
-	RETURN NULL;
+	pontosinf := (SELECT SUM(inf.pontos) FROM condutor cdt
+				  JOIN multa mt ON cdt.idCadastro = mt.idCondutor
+				  JOIN infracao inf ON inf.idInfracao = mt.idInfracao
+				  WHERE cdt.idCadastro = NEW.idCondutor);
+	IF(pontosinf >= 20) THEN
+		UPDATE condutor SET situacaoCNH = 'S' WHERE idCadastro = NEW.idCondutor;
+	END IF;
+	RETURN NEW;
 END; $$ 
 LANGUAGE plpgsql; 
  
@@ -119,10 +122,10 @@ RETURNS TRIGGER
 AS $$
 DECLARE
 BEGIN							
-	if((SELECT current_date) > old.dataVencimento) THEN
-		raise EXCEPTION 'A data para alteração foi excedida';			
-	end if;		 
-	return NULL;
+	IF((SELECT current_date) > old.dataVencimento) THEN
+		raise EXCEPTION 'A data para alteração foi excedida';
+	END IF;
+	RETURN NEW;
 END; $$
 LANGUAGE plpgsql;
 
@@ -162,7 +165,7 @@ BEGIN
 	JOIN marca mc ON mc.idMarca = md.idMarca
 	WHERE vc.renavam = renavam_aux
 	ORDER BY dataCompra, dataVenda;
-END; $$
+END; $$;
 
 -- 1- Função calcula juros e valor final da multa
 -- 2- Função que paga a multa, setando os valores dos campos.
@@ -198,13 +201,18 @@ AFTER INSERT ON multa
 FOR EACH ROW EXECUTE FUNCTION aplicacao_juros();
 
 -- 2
-CREATE OR REPLACE PROCEDURE pagar_multa(idm integer, datapagamento date)
+CREATE OR REPLACE PROCEDURE pagar_multa(idm integer, idc integer, dtp date)
 LANGUAGE plpgsql
 AS $$
 DECLARE
-   aux date;	
+	oldcondutor integer;
 BEGIN
-	UPDATE multa SET pago = 'S', dataPagamento = datapagamento WHERE idMulta = idm;
+	oldcondutor := (SELECT idCondutor FROM multa WHERE idMulta = idm);
+	IF oldcondutor = idc THEN
+		UPDATE multa SET pago = 'S', dataPagamento = dtp WHERE idMulta = idm;
+	ELSE
+		UPDATE multa SET pago = 'S', dataPagamento = dtp, idCondutor = idc WHERE idMulta = idm;
+	END IF;
 END $$;
 
 -- DATA DE VENCIMENTO DA MULTA
@@ -290,4 +298,4 @@ BEGIN
 			dataFinal := last_day('2019-11-01'::DATE);
 	END CASE;
 	RETURN dataFinal;
-END; $$
+END; $$;

@@ -230,64 +230,226 @@ BEGIN
 	RETURN dataFinal;
 END $$;
 
--- FUNÇÃO PARA RETORNAR ULTIMO DIA UTIL DO MES
 
-CREATE OR REPLACE FUNCTION last_day(DATE)
-RETURNS DATE
-LANGUAGE PLPGSQL AS
-$$
-DECLARE
-	util integer;
-	diaFinal date;
-	dataFinal date;
+--LICENCIAMENTO 
+
+
+--FUNCTION RETORNA O ULTIMO DIA UTIL
+
+CREATE OR REPLACE FUNCTION retorna_dia_util(dia integer,datalim date)
+RETURNS date
+LANGUAGE 'plpgsql'
+AS $$
 BEGIN
-	diaFinal := (date_trunc('MONTH', $1) + INTERVAL '1 MONTH - 1 day')::DATE;
- 	util := date_part('dow', diaFinal);
-	CASE util 
-		WHEN 0 THEN
-			dataFinal := (date_trunc('MONTH', $1) + INTERVAL '1 MONTH - 3 day')::DATE;
-		WHEN 6 THEN
-			dataFinal := (date_trunc('MONTH', $1) + INTERVAL '1 MONTH - 2 day')::DATE;
-		ELSE
-			RETURN diaFinal;
-	END CASE;
-	RETURN dataFinal;
-END $$;
+if diasem <> 0 and diasem <> 6 Then 
+return datalim;
+else
+	if diasem = 0 then 
+		datalim:= datalim - INTERVAL '2 day';
+		return datalim;
+	else
+		datalim:= datalim - INTERVAL '1 day';
+		return datalim;
+	end if;
+end if;
+END; $$
 
--- LICENCIAMENTO
 
-CREATE OR REPLACE FUNCTION dataVenc_licenciamento(placa_aux text)
-RETURNS DATE
+--FUNCTION RETORNA INTEIRO REFERENTE AO DIA DA SEMANA (0-domingo a 6-Sabado)
+
+Create Or Replace Function eh_data_util(datalim date)
+Returns integer 
+Language 'plpgsql'
+AS $$
+Begin
+Return date_part('dow', datalim);
+End; $$
+
+
+--FUNCTION DATA DE VENCIMENTO DE LICENCIAMENTO
+
+DROP FUNCTION lancamentorl(text)
+CREATE OR REPLACE FUNCTION lancamentorl( placaa text)
+RETURNS date
 LANGUAGE 'plpgsql'
 AS $$
 DECLARE
-	dataFinal date;
-	digito text;
-	digfnl integer;
+datalimite date;
+digito text;
+digfnl integer;
+diasem integer;
+
 BEGIN
-	digfnl := length(placa_aux);
-	digito := substr(placa_aux, digfnl, 1);
-	CASE digito 
-		WHEN '0' THEN 
-			dataFinal := last_day('2019-12-01'::DATE);
-		WHEN '1' THEN 
-			dataFinal := last_day('2019-03-01'::DATE);
-		WHEN '2' THEN 
-			dataFinal := last_day('2019-04-01'::DATE);
-		WHEN '3' THEN 
-			dataFinal := last_day('2019-05-01'::DATE);
-		WHEN '4'THEN 
-			dataFinal := last_day('2019-06-01'::DATE);
-		WHEN '5' THEN 
-			dataFinal := last_day('2019-07-01'::DATE);
-		WHEN '6' THEN 
-			dataFinal := last_day('2019-08-01'::DATE);
-		WHEN '7' THEN 
-			dataFinal := last_day('2019-09-01'::DATE);
-		WHEN '8' THEN 
-			dataFinal := last_day('2019-10-01'::DATE);
-		WHEN '9' THEN 
-			dataFinal := last_day('2019-11-01'::DATE);
-	END CASE;
-	RETURN dataFinal;
-END; $$
+
+digfnl := length(placaa);
+digito := substr(placaa,digfnl,1);
+
+
+CASE digito 
+WHEN '0' 
+THEN 
+	datalimite := date_trunc('month',DATE(date_part('year',current_date)||'/12/01')) + INTERVAL'1 month' - INTERVAL'1 day';
+	diasem:= eh_data_util(datalimite);
+	datalimite:=retorna_dia_util(diasem,datalimite);
+
+WHEN '1' 
+THEN 
+	datalimite := date_trunc('month',DATE(date_part('year',current_date)||'/03/01')) + INTERVAL'1 month' - INTERVAL'1 day';
+	diasem:= eh_data_util(datalimite);
+	datalimite:=retorna_dia_util(diasem,datalimite);
+
+WHEN '2' 
+THEN 
+	datalimite := date_trunc('month',DATE(date_part('year',current_date)||'/04/01')) + INTERVAL'1 month' - INTERVAL'1 day';
+	diasem:= eh_data_util(datalimite);
+	datalimite:=retorna_dia_util(diasem,datalimite);
+
+WHEN '3' 
+THEN 
+	datalimite := date_trunc('month',DATE(date_part('year',current_date)||'/05/01')) + INTERVAL'1 month' - INTERVAL'1 day';
+	diasem:= eh_data_util(datalimite);
+	datalimite:=retorna_dia_util(diasem,datalimite);
+WHEN '4'
+THEN 
+	datalimite := date_trunc('month',DATE(date_part('year',current_date)||'/06/01')) + INTERVAL'1 month' - INTERVAL'1 day';
+	diasem:= eh_data_util(datalimite);
+	datalimite:=retorna_dia_util(diasem,datalimite);
+
+WHEN '5' 
+THEN 
+	datalimite := date_trunc('month',DATE(date_part('year',current_date)||'/07/01')) + INTERVAL'1 month' - INTERVAL'1 day';
+	diasem:= eh_data_util(datalimite);
+	datalimite:=retorna_dia_util(diasem,datalimite);
+
+WHEN '6' 
+THEN 
+	datalimite := date_trunc('month',DATE(date_part('year',current_date)||'/08/01')) + INTERVAL'1 month' - INTERVAL'1 day';
+	diasem:= eh_data_util(datalimite);
+	datalimite:=retorna_dia_util(diasem,datalimite);
+
+WHEN '7' 
+THEN 
+	datalimite := date_trunc('month',DATE(date_part('year',current_date)||'/09/01')) + INTERVAL'1 month' - INTERVAL'1 day';
+	diasem:= eh_data_util(datalimite);
+	datalimite:=retorna_dia_util(diasem,datalimite);
+
+WHEN '8' 
+THEN 
+	datalimite := date_trunc('month',DATE(date_part('year',current_date)||'/10/01')) + INTERVAL'1 month' - INTERVAL'1 day';
+	diasem:= eh_data_util(datalimite);
+	datalimite:=retorna_dia_util(diasem,datalimite);
+
+WHEN '9' 
+THEN 
+	datalimite := date_trunc('month',DATE(date_part('year',current_date)||'/11/01')) + INTERVAL'1 month' - INTERVAL'1 day';
+	diasem:= eh_data_util(datalimite);
+	datalimite:=retorna_dia_util(diasem,datalimite);
+
+END CASE;
+RETURN datalimite;
+END;
+$$
+
+
+--PROCEDURE AUXILIAR INSERE QUANDO PAGO
+
+Create Or Replace Procedure verificacondicao(pagol text,datavl date,renav text)
+Language 'plpgsql'
+AS $$
+Begin
+
+RAISE NOTICE 'Entrei %',renav;
+if pagol='S'Then
+	
+	if datavl < CURRENT_DATE  
+	THEN
+		UPDATE licenciamento 
+		SET ano = date_part('year',current_date)::integer, datavenc = lancamentorl(renav), pago = 'N'	
+		where renavam = renav;
+	end if;
+				
+
+end if;
+
+End; $$
+
+--PROCEDURE FAZ LICENCIAMENTO
+
+CREATE OR REPLACE PROCEDURE licenciamento()
+LANGUAGE plpgsql
+AS $$
+DECLARE
+
+--Declarando o cursor para veiculo
+cursorVeiculo NO SCROLL CURSOR
+FOR SELECT Renavam FROM veiculo;
+--Declarando o cursor para licenciamento
+cursorLicenciamento NO SCROLL CURSOR (renav text)
+FOR SELECT ano, renavam, datavenc, pago from licenciamento;
+
+linhaV RECORD;
+linhaL RECORD;
+tipo integer;
+
+BEGIN
+--Abrindo o cursor para veiculo
+OPEN cursorVeiculo;
+LOOP
+
+	FETCH cursorVeiculo INTO linhaV;
+	EXIT WHEN NOT FOUND;
+	RAISE NOTICE 'renavam da tabela veiculo %', linhaV.renavam;
+	--Abrindo o cursor para licenciamento
+	OPEN cursorLicenciamento(linhaV.renavam);
+
+	LOOP 
+
+		FETCH cursorLicenciamento INTO linhaL;
+		RAISE NOTICE 'renavam da tabela licenciamento %', linhaL.renavam;
+		if linhal.renavam=linhaV.renavam then
+			call verificacondicao(linhal.pago,linhaL.datavenc,linhaL.renavam);
+			exit;
+		end if;
+		if not found then
+			insert into licenciamento values(date_part('year',current_date)::integer,linhaV.renavam,lancamentorl(linhaV.renavam),'N');
+			EXIT;
+
+		end if;
+		EXIT WHEN NOT FOUND;
+
+	END LOOP;
+
+	CLOSE cursorLicenciamento;
+END LOOP;
+CLOSE cursorVeiculo;
+END $$;
+
+
+--TRIGGER INSERÇÃO VEICULO E LICENCIAMENTO
+
+CREATE OR REPLACE FUNCTION insercao_veiculo()
+
+RETURNS TRIGGER
+
+AS $$
+
+DECLARE
+
+	ano integer;
+
+BEGIN
+	ano=date_part('year',current_date)::integer;
+	
+    	INSERT INTO licenciamento VALUES (ano,NEW.renavam,dataVenc_licenciamento(NEW.renavam),'S');
+    	return NEW;
+
+END; $$ 
+
+LANGUAGE plpgsql;
+
+
+CREATE TRIGGER executa_insercao_veiculo
+
+AFTER INSERT ON veiculo
+
+FOR EACH ROW EXECUTE PROCEDURE insercao_veiculo();

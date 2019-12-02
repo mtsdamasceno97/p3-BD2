@@ -18,8 +18,8 @@
                 <li><a href="/home"><i class="fas fa-home"></i>HOME</a></li>
                 <li><a href="/veiculos"><i class="fas fa-car"></i>VEICULOS</a></li>
                 <li><a href="/condutores"><i class="fas fa-user-alt"></i>CONDUTORES</a></li>
-                <li><a href="/multa"><i class="fas fa-clipboard-list"></i>MULTAS</a></li>
-
+                <li><a href="/multas"><i class="fas fa-clipboard-list"></i>MULTAS</a></li>
+                <li><a href="/licenciamentos"><i class="fas fa-clipboard-list"></i>LICENCIAMENTO</a></li>
             </ul>
         </div>
         <div class="main_content">
@@ -36,13 +36,17 @@
                                 <td><h4>Renavam</h4></td>
                                 <td><h4>Placa</h4></td>
                                 <td><h4>Ano</h4></td>
-                                <td><h4>Data de Compra</h4></td>
-                                <td><h4>Data de Aquisição</h4></td>
+                                <td><h4>Categoria</h4></td>
+                                <td><h4>Proprietario</h4></td>
+                                <td><h4>Modelo</h4></td>
+                                <td><h4>Cidade</h4></td>
+                                <td><h4>Compra</h4></td>
+                                <td><h4>Aquisição</h4></td>
                                 <td><h4>Valor</h4></td>
                                 <td><h4>Situação</h4></td>
                             </tr>
                         </thead>
-                        <tbody align="center">
+                        <tbody class="tbody" align="center">
 
 
 
@@ -50,6 +54,10 @@
                                 <td th:text="${veiculo.renavam}"></td>
                                 <td th:text="${veiculo.placa}"></td>
                                 <td th:text="${veiculo.ano}"></td>
+                                <td th:text="${veiculo.categoria.idCategoria}"></td>
+                                <td th:text="${veiculo.condutor.idCadastro}"></td>
+                                <td th:text="${veiculo.modelo.idModelo}"></td>
+                                <td th:text="${veiculo.cidade.idCidade}"></td>
                                 <td th:text="${veiculo.dataCompra}"></td>
                                 <td th:text="${veiculo.dataAquisicao}"></td>
                                 <td th:text="${veiculo.valor}"></td>

@@ -2,21 +2,47 @@
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" th:href="@{/assets/css/style.css}">
     <title>Inserção de Condutores</title>
+    <link rel="stylesheet" th:href="@{/assets/css/estilo.css}">
+    <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
 </head>
 <body>
-<h1>Inserção de Condutor</h1>
-<form action="#" th:action="@{/condutores}" th:object="${condutor}" method="post">
-    <p>Cpf: <input type="text" th:field="*{cpf}" /></p>
-    <p>Nome: <input type="number" th:field="*{nome}" /></p>
-    <p>Data de Nascimento: <input type="date" th:field="*{dataNasc}" /></p>
-    <p>Categoria CNH: <input type="date" th:field="*{idCategoriaCNH}" /></p>
-    <p>Endereço: <input type="number" th:field="*{endereco}" /></p>
-    <p>Bairro: <input type="text" th:field="*{bairro}" /></p>
-    <p>idCidade: <input type="text" th:field="*{idCidade}" /></p>
-    <p>Situação CNH: <input type="text" th:field="*{situacaoCNH}" /></p>
-    <p><input type="submit" value="Salvar" /><input type="reset" value="Limpar" /></p>
-</form>
+
+        <div align="center" class="wrapper">
+
+            <div class="sidebar">
+                <h2>BNT - IFPB</h2>
+                <ul>
+
+                    <li><a href="/home"><i class="fas fa-home"></i>HOME</a></li>
+                    <li><a href="/veiculos"><i class="fas fa-car"></i>VEICULOS</a></li>
+                    <li><a href="/condutores"><i class="fas fa-user-alt"></i>CONDUTORES</a></li>
+                    <li><a href="/multas"><i class="fas fa-clipboard-list"></i>MULTAS</a></li>
+                    <li><a href="/licenciamentos"><i class="fas fa-clipboard-list"></i>LICENCIAMENTO</a></li>
+
+                </ul>
+            </div>
+            <div class="main_content">
+                <div class="header">BNT</div>
+
+            </div>
+
+        </div>
+
+
+    <div align="center">
+        <h1>Inserção de Condutor</h1>
+        <form action="#" th:action="@{/condutores}" th:object="${condutor}" method="post">
+            <p>Cpf: <input type="text" th:field="*{cpf}" /></p>
+            <p>Nome: <input type="text" th:field="*{nome}" /></p>
+            <p>Data de Nascimento: <input type="date" th:field="*{dataNasc}" /></p>
+            <p>Categoria CNH: <input type="text" th:field="*{categoriaCNH.idCategoriaCNH}" /></p>
+            <p>Endereço: <input type="text" th:field="*{endereco}" /></p>
+            <p>Bairro: <input type="text" th:field="*{bairro}" /></p>
+            <p>idCidade: <input type="text" th:field="*{cidade.idCidade}" /></p>
+            <p>Situação CNH: <input type="text" th:field="*{situacaoCNH}" /></p>
+            <p><input type="submit" value="Salvar" /><input type="reset" value="Limpar" /></p>
+        </form>
+    </div>
 </body>
 </html>

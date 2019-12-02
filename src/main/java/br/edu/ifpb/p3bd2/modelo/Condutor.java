@@ -9,6 +9,7 @@ import java.time.LocalDate;
 
 @Entity
 @Data
+@Table(name = "condutor")
 public class Condutor {
 
     private enum SituacaoCNH {
@@ -16,6 +17,7 @@ public class Condutor {
     }
 
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(nullable = false,name = "idcadastro")
     private Integer idCadastro;
 
@@ -23,7 +25,7 @@ public class Condutor {
     @Column(length = 11, nullable = false, name = "cpf")
     private String cpf;
 
-    @Size(min = 50, max = 50)
+    @Size(max = 50)
     @Column(length = 50, nullable = false, name = "nome")
     private String nome;
 
@@ -36,13 +38,13 @@ public class Condutor {
     private CategoriaCNH categoriaCNH;
 
 
-    @Size(min = 50, max = 50)
-    @Column(length = 50, nullable = false, name = "endereco")
+    @Size(max = 100)
+    @Column(length = 100, nullable = false, name = "endereco")
     private String endereco;
 
 
-    @Size(min = 30, max = 30)
-    @Column(length = 30, nullable = false, name = "bairro")
+    @Size(max = 50)
+    @Column(length = 50, nullable = false, name = "bairro")
     private String bairro;
 
     @ManyToOne

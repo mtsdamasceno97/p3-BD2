@@ -30,8 +30,9 @@ public class CondutorControlador {
 
     @PostMapping
     public String inserirCondutor(@ModelAttribute Condutor condutor) {
-        System.out.println(condutor);
-        return "condutores";
+
+        this.condutorRepositorio.save(condutor);
+        return "redirect:condutores";
     }
 
     @GetMapping("/inserir-condutor")

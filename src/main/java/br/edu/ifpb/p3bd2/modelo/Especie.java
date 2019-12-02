@@ -1,6 +1,5 @@
 package br.edu.ifpb.p3bd2.modelo;
 
-
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -8,21 +7,19 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 
 @Entity
 @Data
-@Table(name = "categoria_cnh")
-public class CategoriaCNH {
+@Table(name = "especie")
+public class Especie {
 
     @Id
-    @Size(max = 3)
-    @Column(name = "idcategoriacnh")
-    private String idCategoriaCNH;
+    @Column(name = "idespecie")
+    private Integer idEspecie;
 
-
-    @Column(name = "descricao")
+    @Size(min = 30, max = 30)
+    @Column(length = 30, nullable = false, name = "descricao")
     private String descricao;
-
-
-
 }
+

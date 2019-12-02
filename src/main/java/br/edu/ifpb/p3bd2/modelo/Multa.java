@@ -18,6 +18,7 @@ public class Multa {
     }
 
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(nullable = false, name = "idmulta")
     private Integer idMulta;
 
@@ -43,7 +44,7 @@ public class Multa {
     private LocalDate dataVencimento;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Column(nullable = false, name = "datapagamento")
+    @Column(name = "datapagamento")
     private LocalDate dataPagamento;
 
     @Column(name = "valor")

@@ -2,9 +2,10 @@
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <title>Inserção de Veículo</title>
     <link rel="stylesheet" th:href="@{/assets/css/estilo.css}">
     <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
-    <title>Inserção de Veículo</title>
+
 </head>
 <body>
 
@@ -17,7 +18,8 @@
                         <li><a href="/home"><i class="fas fa-home"></i>HOME</a></li>
                         <li><a href="/veiculos"><i class="fas fa-car"></i>VEICULOS</a></li>
                         <li><a href="/condutores"><i class="fas fa-user-alt"></i>CONDUTORES</a></li>
-                        <li><a href="/multa"><i class="fas fa-clipboard-list"></i>MULTAS</a></li>
+                        <li><a href="/multas"><i class="fas fa-clipboard-list"></i>MULTAS</a></li>
+                        <li><a href="/licenciamentos"><i class="fas fa-clipboard-list"></i>LICENCIAMENTO</a></li>
 
                     </ul>
                 </div>
@@ -27,22 +29,27 @@
                 </div>
 
     </div>
-        <div class="wrapper2">
+        <div align="center">
             <h1>Inserção de Veículo</h1>
-            <div id="area">
+
                 <div class="input-fields">
                     <form action="#" th:action="@{/veiculos}" th:object="${veiculo}" method="post">
                         <p>Placa: <input type="text" class="input" th:field="*{placa}" /></p>
                         <p>Ano: <input type="number" class="input" th:field="*{ano}" /></p>
-                        <p>Data da Compra: <input class="input" type="date" th:field="*{dataCompra}" /></p>
-                        <p>Data da Aquisição: <input class="input" type="date" th:field="*{dataAquisicao}" /></p>
+                        <p>Categoria: <input type="number" class="input" th:field="*{categoria.idCategoria}" /></p>
+                        <p>Proprietario: <input type="number" class="input" th:field="*{condutor.idCadastro}" /></p>
+                        <p>Modelo: <input type="number" class="input" th:field="*{modelo.idModelo}" /></p>
+                        <p>Cidade: <input type="number" class="input" th:field="*{cidade.idCidade}" /></p>
+                        <p>Compra: <input class="input" type="date" th:field="*{dataCompra}" /></p>
+                        <p>Aquisição: <input class="input" type="date" th:field="*{dataAquisicao}" /></p>
                         <p>Valor: <input class="input" type="number" th:field="*{valor}" /></p>
                         <p>Situação: <input class="input" type="text" th:field="*{situacao}" /></p>
-                        <p><input class="input" type="submit" value="Salvar" /></p> <p><input class="input" type="reset" value="Limpar" /></p>
-
+                        <p><input class="input" type="submit" value="Salvar" /></p>
+                        <p><input class="input" type="reset" value="Limpar" /></p>
                     </form>
-
             </div>
+
+
         </div>
 
 </body>

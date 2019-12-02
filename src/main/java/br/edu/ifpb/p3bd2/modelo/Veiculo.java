@@ -8,6 +8,7 @@ import java.time.LocalDate;
 
 @Data
 @Entity
+@Table(name = "veiculo")
 public class Veiculo {
 
 	private enum Situacao {
@@ -26,6 +27,22 @@ public class Veiculo {
 	@Column(nullable = false, name = "ano")
 	private Integer ano;
 
+	@ManyToOne
+	@JoinColumn(name = "idcategoria")
+	private CategoriaVeiculos categoria;
+
+    @ManyToOne
+    @JoinColumn(name = "idproprietario")
+    private Condutor condutor;
+
+    @ManyToOne
+    @JoinColumn(name = "idmodelo")
+    private Modelo modelo;
+
+    @ManyToOne
+    @JoinColumn(name = "idcidade")
+    private Cidade cidade;
+
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@Column(nullable = false, name = "datacompra")
 	private LocalDate dataCompra;
@@ -41,6 +58,4 @@ public class Veiculo {
 	@Column(length = 1, name = "situacao")
 	private Situacao situacao;
 
-	public void setRenavam(String gerarRenavam) {
-	}
 }

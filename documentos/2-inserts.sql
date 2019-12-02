@@ -1035,24 +1035,24 @@ INSERT INTO veiculo (renavam, placa, ano, idCategoria, idProprietario, idModelo,
 
 -- INFRAÇÃO
 
-INSERT INTO infracao (descricao, valor, pontos) VALUES ('I - Dirigir veículo sem possuir CNH',880.41,7);
-INSERT INTO infracao (descricao, valor, pontos) VALUES ('II Dirigir veículo com CNH cassada ou suspensa',880.41,7);
-INSERT INTO infracao (descricao, valor, pontos) VALUES ('III Dirigir com CNH de categoria errada',586.94,7);
-INSERT INTO infracao (descricao, valor, pontos) VALUES ('VI Dirigir semusar lentes corretoras de visão',293.47,7);
-INSERT INTO infracao (descricao, valor, pontos) VALUES ('V Dirigir com a CNH vencida (+30 dias)',293.47,7);
-INSERT INTO infracao (descricao, valor, pontos) VALUES ('Entregar a direção a pessoa nas condições do artigo 162',293.47,7);
-INSERT INTO infracao (descricao, valor, pontos) VALUES ('Permitir que pessoa nas condições do art. 162 dirija',293.47,7);
-INSERT INTO infracao (descricao, valor, pontos) VALUES ('Dirigir sob a influência de álcool',2934.7,7);
-INSERT INTO infracao (descricao, valor, pontos) VALUES ('Recusar o teste do bafômetro',2934.7,7);
-INSERT INTO infracao (descricao, valor, pontos) VALUES ('Entregar a direção a pessoa habilitada sem condições de dirigir',293.47,7);
-INSERT INTO infracao (descricao, valor, pontos) VALUES ('Deixar o condutor ou passageiro de usar o cinto de segurança',195.23,7);
-INSERT INTO infracao (descricao, valor, pontos) VALUES ('Transportar crianças de forma irregular',293.47,7);
-INSERT INTO infracao (descricao, valor, pontos) VALUES ('Dirigir sem atenção ou sem os cuidados indispensáveis à segurança',88.38,7);
-INSERT INTO infracao (descricao, valor, pontos) VALUES ('Dirigir ameaçando os pedestres ou os demais veículos',88.38,7);
-INSERT INTO infracao (descricao, valor, pontos) VALUES ('Jogar água sobre os pedestres ou veículos',130.16,7);
-INSERT INTO infracao (descricao, valor, pontos) VALUES ('Atirar do veículo ou abandonar na via objetos ou substâncias',130.16,7);
+INSERT INTO infracao (descricao, valor, pontos) VALUES ('I - Dirigir veículo sem possuir CNH', 880.41, 20);
+INSERT INTO infracao (descricao, valor, pontos) VALUES ('II Dirigir veículo com CNH cassada ou suspensa', 880.41, 20);
+INSERT INTO infracao (descricao, valor, pontos) VALUES ('III Dirigir com CNH de categoria errada',586.94, 20);
+INSERT INTO infracao (descricao, valor, pontos) VALUES ('VI Dirigir semusar lentes corretoras de visão',293.47, 10);
+INSERT INTO infracao (descricao, valor, pontos) VALUES ('V Dirigir com a CNH vencida (+30 dias)',293.47, 10);
+INSERT INTO infracao (descricao, valor, pontos) VALUES ('Entregar a direção a pessoa nas condições do artigo 162',293.47, 10);
+INSERT INTO infracao (descricao, valor, pontos) VALUES ('Permitir que pessoa nas condições do art. 162 dirija',293.47, 10);
+INSERT INTO infracao (descricao, valor, pontos) VALUES ('Dirigir sob a influência de álcool',2934.7,9);
+INSERT INTO infracao (descricao, valor, pontos) VALUES ('Recusar o teste do bafômetro',2934.7,9);
+INSERT INTO infracao (descricao, valor, pontos) VALUES ('Entregar a direção a pessoa habilitada sem condições de dirigir',293.47, 9);
+INSERT INTO infracao (descricao, valor, pontos) VALUES ('Deixar o condutor ou passageiro de usar o cinto de segurança',195.23,9);
+INSERT INTO infracao (descricao, valor, pontos) VALUES ('Transportar crianças de forma irregular',293.47,8);
+INSERT INTO infracao (descricao, valor, pontos) VALUES ('Dirigir sem atenção ou sem os cuidados indispensáveis à segurança',88.38,8);
+INSERT INTO infracao (descricao, valor, pontos) VALUES ('Dirigir ameaçando os pedestres ou os demais veículos',88.38,8);
+INSERT INTO infracao (descricao, valor, pontos) VALUES ('Jogar água sobre os pedestres ou veículos',130.16,8);
+INSERT INTO infracao (descricao, valor, pontos) VALUES ('Atirar do veículo ou abandonar na via objetos ou substâncias',130.16,8);
 INSERT INTO infracao (descricao, valor, pontos) VALUES ('Disputar corrida',2934.7,7);
-INSERT INTO infracao (descricao, valor, pontos) VALUES ('Promover racha',2934.7,7);
+INSERT INTO infracao (descricao, valor, pontos) VALUES ('Promover racha',2934.7,8);
 INSERT INTO infracao (descricao, valor, pontos) VALUES ('Realizar manobra perigosa',2934.7,7);
 INSERT INTO infracao (descricao, valor, pontos) VALUES ('I Condutor envolvido em acidente deixar de prestar socorro',1467.35,7);
 INSERT INTO infracao (descricao, valor, pontos) VALUES ('II Condutor envolvido em acidente não adotar medidas de segurança no local',1467.35,7);

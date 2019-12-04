@@ -2,11 +2,13 @@
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Licenciamento</title>
+    <title>Listagem dos Veículos</title>
     <link rel="stylesheet" th:href="@{/assets/css/estilo.css}">
     <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+
 </head>
 <body>
+
 
 <div class="wrapper">
     <div class="sidebar">
@@ -30,7 +32,6 @@
                 </ul>
             </li>
 
-
         </ul>
     </div>
     <div class="main_content">
@@ -38,33 +39,14 @@
 
     </div>
 
-
-    <div class="main_content2">
-
-        <table align="center" border="1" cellpadding="5">
-            <thead>
-            <tr>
-                <td><h4>Ano</h4></td>
-                <td><h4>Renavam</h4></td>
-                <td><h4></h4>DataVenc</td>
-                <td><h4>Pago</h4></td>
-            </tr>
-            </thead>
-            <tbody align="center">
-
-
-
-            <tr th:each="licenciamento : ${licenciamentos}">
-                <td th:text="${licenciamento.ano}"></td>
-                <td th:text="${licenciamento.renavam}"></td>
-                <td th:text="${licenciamento.dataVenc}"></td>
-                <td th:text="${licenciamento.pago}"></td>
-            </tr>
-            </tbody>
-        </table>
-
-    </div>
 </div>
 
+    <div align="center">
+        <h1>Consultar Licenciamento</h1>
+        <form action="#" th:action="@{/licenciamentos/calculo-licenciamento}" method="post">
+            <p align="center">Renavam: <input type="text" name="renavam" id="renavam" /></p>
+            <p><input type="submit" value="Consultar" /><input type="reset" value="Limpar" /></p>
+        </form>
+    </div>
 </body>
 </html>

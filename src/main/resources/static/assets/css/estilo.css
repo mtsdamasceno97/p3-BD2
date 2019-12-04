@@ -56,9 +56,11 @@ body{
     background: #594f8d;
 }
 
-.wrapper .sidebar ul li:hover a{
-    color: #fff;
-}
+.wrapper .sidebar li ul{display: none}
+.wrapper .sidebar li:hover ul{display: block}
+.wrapper .sidebar li ul a{color: #ffffff}
+
+
 
 .wrapper .main_content2{
     height: 150px  ;
@@ -71,4 +73,5 @@ body{
     margin-left: 220px;
 
 }
+
 

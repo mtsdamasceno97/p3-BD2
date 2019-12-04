@@ -44,21 +44,23 @@
         <table align="center" border="1" cellpadding="5">
             <thead>
             <tr>
-                <td><h4>Ano</h4></td>
-                <td><h4>Renavam</h4></td>
-                <td><h4></h4>DataVenc</td>
-                <td><h4>Pago</h4></td>
+                <td><h4>idCondutor</h4></td>
+                <td><h4>Nome</h4></td>
+                <td><h4></h4>CNH</td>
+                <td><h4>Pontos</h4></td>
+                <td><h4>AnoInfracao</h4></td>
             </tr>
             </thead>
             <tbody align="center">
 
 
 
-            <tr th:each="licenciamento : ${licenciamentos}">
-                <td th:text="${licenciamento.ano}"></td>
-                <td th:text="${licenciamento.renavam}"></td>
-                <td th:text="${licenciamento.dataVenc}"></td>
-                <td th:text="${licenciamento.pago}"></td>
+            <tr th:each="condutorCarteira : ${condutoresCarteira}">
+                <td th:text="${condutorCarteira.condutor}"></td>
+                <td th:text="${condutorCarteira.nomeCondutor}"></td>
+                <td th:text="${condutorCarteira.categoriaCNH}"></td>
+                <td th:text="${condutorCarteira.pontosInfracoes}"></td>
+                <td th:text="${condutorCarteira.anoInfracao}"></td>
             </tr>
             </tbody>
         </table>

@@ -263,7 +263,7 @@ BEGIN
 	RETURN dataFinal;
 END $$;
 
-CREATE OR REPLACE FUNCTION data_vencimento_lic(placa_aux text)
+CREATE OR REPLACE FUNCTION data_vencimento_lic(placa_aux text, pano integer)
 RETURNS date
 LANGUAGE 'plpgsql'
 AS $$
@@ -273,7 +273,7 @@ DECLARE
 	digito text;
 	digfnl integer;
 BEGIN
-	ano := date_part('year', current_date);
+	ano := pano;
 	digfnl := length(placa_aux);
 	digito := substr(placa_aux, digfnl, 1);
 	CASE digito 
@@ -304,23 +304,23 @@ END; $$;
 
 --PROCEDURE AUXILIAR INSERE QUANDO PAGO
 
-CREATE OR REPLACE PROCEDURE verificacondicao(pagol text, datavl date, renav text, placa_aux text)
+CREATE OR REPLACE PROCEDURE verificacondicao(pagol text, datavl date, renav text, placa_aux text, pano integer)
 LANGUAGE 'plpgsql'
 AS $$
 BEGIN
-	IF pagol = 'S' THEN
-		IF datavl < CURRENT_DATE
+	
+		IF date_part('year', datavl) < pano
 		THEN
 			UPDATE licenciamento
-			SET ano = date_part('year',current_date)::integer, datavenc = data_vencimento_lic(placa_aux), pago = 'N'
+			SET ano = pano, datavenc = data_vencimento_lic(placa_aux, pano), pago = 'N'
 			WHERE renavam = renav;
 		END IF;
-	END IF;
+	
 END; $$;
 
 --PROCEDURE FAZ LICENCIAMENTO
 
-CREATE OR REPLACE PROCEDURE licenciamento()
+CREATE OR REPLACE PROCEDURE licenciamento(pano integer)
 LANGUAGE plpgsql
 AS $$
 DECLARE
@@ -340,11 +340,11 @@ BEGIN
 		LOOP 
 			FETCH cursorLicenciamento INTO linhaL;
 			IF linhal.renavam = linhaV.renavam THEN
-				CALL verificacondicao (linhal.pago, linhaL.datavenc, linhaL.renavam, placa_aux);
+				CALL verificacondicao (linhal.pago, linhaL.datavenc, linhaL.renavam, placa_aux,pano);
 				EXIT;
 			END IF;
 			IF NOT FOUND THEN
-				INSERT INTO licenciamento VALUES (date_part('year',current_date)::integer, linhaV.renavam, data_vencimento_lic(placa_aux),'N');
+				INSERT INTO licenciamento VALUES (pano, linhaV.renavam, data_vencimento_lic(placa_aux,pano),'N');
 				EXIT;
 			END IF;
 			EXIT WHEN NOT FOUND;
